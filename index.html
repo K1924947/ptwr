@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>PTWR Audit · 7PPP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>PTWR Audit 7PPP</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -20,11 +20,9 @@ html,body{height:100%}
 body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;min-height:100vh}
 .screen{display:none;flex-direction:column;width:100%;max-width:480px;min-height:100vh}
 .screen.active{display:flex}
-
 .topbar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
 .topbar-title{font-size:15px;font-weight:700}
 .topbar-sub{font-size:12px;color:var(--muted);margin-top:1px}
-
 .btn-ghost{background:none;border:1.5px solid var(--border);border-radius:10px;padding:7px 13px;font-size:13px;font-weight:600;font-family:inherit;color:var(--text);cursor:pointer;white-space:nowrap}
 .btn-ghost:active{background:var(--bg)}
 .btn-primary{width:100%;padding:17px;border-radius:var(--r);border:none;background:var(--primary);color:#fff;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;transition:opacity .15s,transform .1s}
@@ -67,7 +65,8 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
 .tile-text p{font-size:13px;color:var(--muted);margin-top:2px}
 .section-head{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;padding:0 18px;margin-bottom:10px}
 .recent-list{padding:0 18px 32px;display:flex;flex-direction:column;gap:8px}
-.recent-row{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.recent-row{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.recent-row:active{background:var(--primary-light)}
 .rr-id{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500}
 .rr-meta{font-size:12px;color:var(--muted);margin-top:2px}
 .rr-badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;background:var(--green-light);color:var(--green);border:1px solid var(--green-border);white-space:nowrap}
@@ -123,10 +122,10 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
 .tick{color:var(--green)}.cross{color:#cbd5e1}
 .survey-footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;padding:14px 20px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--bg) 65%,transparent)}
 
-/* MODAL — centred */
+/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;align-items:center;justify-content:center;padding:24px}
 .modal-overlay.open{display:flex}
-.modal-box{background:#fff;border-radius:20px;padding:26px 22px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-box{background:#fff;border-radius:20px;padding:26px 22px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto}
 .modal-title{font-size:18px;font-weight:800;margin-bottom:8px}
 .modal-desc{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.5}
 .modal-textarea{width:100%;padding:13px 15px;border:1.5px solid var(--border);border-radius:var(--rs);font-size:14px;font-family:inherit;color:var(--text);background:var(--bg);outline:none;resize:none;height:100px;transition:border-color .15s;margin-bottom:14px}
@@ -137,88 +136,41 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
 .modal-confirm{background:var(--amber);color:#fff}
 .modal-confirm.red{background:var(--red)}
 
+/* ENTRY DETAIL MODAL */
+.detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:flex-end;justify-content:center}
+.detail-overlay.open{display:flex}
+.detail-sheet{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom)}
+.detail-handle{width:40px;height:4px;background:var(--border);border-radius:100px;margin:12px auto 0}
+.detail-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:1}
+.detail-header h2{font-size:17px;font-weight:800}
+.detail-close{background:none;border:1.5px solid var(--border);border-radius:10px;width:34px;height:34px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.detail-body{padding:16px 20px 32px}
+.detail-hero{background:linear-gradient(135deg,var(--primary-dk),var(--primary));border-radius:var(--r);padding:18px;text-align:center;margin-bottom:16px;color:#fff}
+.detail-score{font-size:42px;font-weight:800;line-height:1}
+.detail-sublabel{font-size:12px;opacity:.75;margin-top:4px}
+.detail-tmpl{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700}
+.detail-tmpl.yes{background:rgba(134,239,172,.25);color:#86efac}
+.detail-tmpl.no{background:rgba(252,165,165,.25);color:#fca5a5}
+.detail-meta{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 16px;margin-bottom:14px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between}
+.detail-domains{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden}
+.detail-domain-row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:12px;font-size:14px}
+.detail-domain-row:last-child{border-bottom:none}
+.detail-domain-label{flex:1}
+.detail-domain-val{font-weight:700;font-size:13px}
+.detail-domain-val.yes{color:var(--green)}
+.detail-domain-val.no{color:#cbd5e1}
+
+/* COLLECTOR SETTINGS MODAL */
+.col-settings-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center;padding:24px}
+.col-settings-overlay.open{display:flex}
+.col-settings-sheet{background:var(--bg);border-radius:20px;width:100%;max-width:440px;max-height:85vh;overflow-y:auto}
+
 /* ADMIN */
 .admin-tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:57px;z-index:9}
 .tab-btn{flex:1;padding:12px 4px;font-size:12px;font-weight:700;font-family:inherit;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer}
 .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
 .tab-panel{display:none;padding-bottom:80px}
 .tab-panel.active{display:block}
-.admin-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 18px}
-.stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:14px}
-.stat-num{font-size:28px;font-weight:800;color:var(--primary)}
-.stat-label{font-size:12px;color:var(--muted);margin-top:2px}
-.stat-card.green .stat-num{color:var(--green)}
-.stat-card.amber .stat-num{color:var(--amber)}
-.breakdown-list{padding:0 18px 16px;display:flex;flex-direction:column;gap:8px}
-.cb-row{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;gap:10px}
-.cb-row-name{font-weight:600;font-size:13px;width:90px;flex-shrink:0}
-.cb-row-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:100px;overflow:hidden}
-.cb-row-bar{height:100%;background:var(--primary);border-radius:100px}
-.cb-row-count{font-size:13px;color:var(--muted);text-align:right;flex-shrink:0}
-
-/* collector select list */
-.col-select-btn{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;width:100%;font-family:inherit;text-align:left}
-.col-select-btn:active{background:var(--primary-light)}
-.col-select-name{font-size:14px;font-weight:600}
-.col-select-meta{font-size:12px;color:var(--muted);margin-top:2px}
-.col-select-arrow{font-size:16px;color:var(--muted)}
-
-/* collector detail stats */
-.detail-stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
-.detail-stat{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center}
-.detail-stat .n{font-size:22px;font-weight:800;color:var(--primary)}
-.detail-stat .l{font-size:11px;color:var(--muted);margin-top:2px}
-.detail-stat.green .n{color:var(--green)}
-.detail-stat.amber .n{color:var(--amber)}
-.domain-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.domain-bar-label{font-size:12px;color:var(--text);width:120px;flex-shrink:0}
-.domain-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:100px;overflow:hidden}
-.domain-bar-fill{height:100%;background:var(--primary);border-radius:100px}
-.domain-bar-pct{font-size:12px;font-weight:600;color:var(--muted);width:34px;text-align:right;flex-shrink:0}
-
-/* skipped in entries */
-.skip-toggle{padding:10px 14px;background:var(--amber-light);border:1.5px solid #fcd34d;border-radius:var(--rs);display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:8px}
-.skip-row{background:var(--card);border:1.5px solid #fcd34d;border-radius:var(--rs);padding:12px 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.skip-row-left{flex:1}
-.skip-entry{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--amber)}
-.skip-collector{font-size:12px;color:var(--muted);margin-top:2px}
-.skip-reason{font-size:13px;color:var(--text);margin-top:6px;line-height:1.4}
-
-/* entry row */
-.entry-row{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.entry-row-del{background:none;border:1.5px solid var(--red-border);border-radius:8px;padding:5px 9px;font-size:13px;color:var(--red);cursor:pointer;font-family:inherit;flex-shrink:0}
-
-/* filter chips */
-.filter-chip{padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;font-family:inherit;border:1.5px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer}
-.filter-chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
-
-/* SETTINGS */
-.settings-section{padding:16px 18px 0}
-.settings-section h3{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;margin-top:20px}
-.settings-section h3:first-child{margin-top:0}
-.setting-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
-.setting-row{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.setting-row:last-child{border-bottom:none}
-.setting-row label{font-size:13px;font-weight:600;min-width:70px;flex-shrink:0;color:var(--muted)}
-.setting-input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--text);background:var(--bg);outline:none}
-.setting-input:focus{border-color:var(--primary)}
-.setting-input.sora{font-family:'Sora',sans-serif}
-.collector-cfg{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
-.cfg-fields{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;align-items:end}
-.cfg-field label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px}
-.cfg-input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px 8px;font-size:13px;color:var(--text);background:var(--bg);outline:none;font-family:inherit}
-.cfg-input:focus{border-color:var(--primary)}
-.cfg-input.mono{font-family:'JetBrains Mono',monospace}
-.pa-box{background:var(--amber-light);border:1.5px solid #fcd34d;border-radius:var(--r);padding:16px;margin-bottom:16px}
-.pa-box strong{font-size:13px;font-weight:700;color:var(--amber);display:block;margin-bottom:6px}
-.pa-box p{font-size:12px;color:var(--amber);line-height:1.5;margin-bottom:10px}
-.pa-url-input{width:100%;padding:10px 12px;border:1.5px solid #fcd34d;border-radius:10px;font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--text);background:#fff;outline:none}
-.excel-btn{display:block;width:100%;margin-top:10px;padding:12px;border-radius:10px;background:#217346;color:#fff;font-size:13px;font-weight:700;text-align:center;text-decoration:none;font-family:'Sora',sans-serif;border:none;cursor:pointer}
-
-/* EXPORT */
-.export-area{padding:16px 18px 100px;display:flex;flex-direction:column;gap:12px}
-#csv-preview{width:100%;height:160px;border:1.5px solid var(--border);border-radius:var(--rs);padding:12px;font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--card);color:var(--text);resize:none;outline:none}
-.export-info{background:var(--primary-light);border:1.5px solid var(--primary-border);border-radius:var(--rs);padding:14px;font-size:13px;color:var(--primary);line-height:1.5}
 
 /* OVERVIEW */
 .overview-wrap{padding:16px 18px 80px}
@@ -238,20 +190,72 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
 .ov-label{font-size:12px;color:var(--muted);margin-top:2px}
 .ov-card.green .ov-num{color:var(--green)}
 .ov-card.amber .ov-num{color:var(--amber)}
-.ov-card.red .ov-num{color:var(--red)}
 .domain-table{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
 .domain-table-row{display:flex;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);gap:10px}
 .domain-table-row:last-child{border-bottom:none}
 .domain-table-label{font-size:13px;color:var(--text);flex:1}
-.domain-table-pct{font-size:13px;font-weight:700;color:var(--primary);width:38px;text-align:right;flex-shrink:0}
+.domain-table-pct{font-size:13px;font-weight:700;width:38px;text-align:right;flex-shrink:0}
 .domain-table-bar{width:80px;height:6px;background:var(--border);border-radius:100px;overflow:hidden;flex-shrink:0}
-.domain-table-fill{height:100%;background:var(--primary);border-radius:100px}
+.domain-table-fill{height:100%;border-radius:100px}
 
-/* COLLECTOR STATUS DOT */
+/* COLLECTORS TAB */
 .col-status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .dot-none{background:#cbd5e1}
 .dot-progress{background:#f59e0b}
 .dot-complete{background:#15803d}
+.col-select-btn{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;width:100%;font-family:inherit;text-align:left}
+.col-select-btn:active{background:var(--primary-light)}
+.col-select-name{font-size:14px;font-weight:600}
+.col-select-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.col-select-arrow{font-size:16px;color:var(--muted)}
+.detail-stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.detail-stat{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center}
+.detail-stat .n{font-size:22px;font-weight:800;color:var(--primary)}
+.detail-stat .l{font-size:11px;color:var(--muted);margin-top:2px}
+.detail-stat.green .n{color:var(--green)}
+.detail-stat.amber .n{color:var(--amber)}
+.domain-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.domain-bar-label{font-size:12px;color:var(--text);width:120px;flex-shrink:0}
+.domain-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:100px;overflow:hidden}
+.domain-bar-fill{height:100%;background:var(--primary);border-radius:100px}
+.domain-bar-pct{font-size:12px;font-weight:600;color:var(--muted);width:34px;text-align:right;flex-shrink:0}
+
+/* ENTRIES TAB */
+.skip-toggle{padding:10px 14px;background:var(--amber-light);border:1.5px solid #fcd34d;border-radius:var(--rs);display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:8px}
+.skip-row{background:var(--card);border:1.5px solid #fcd34d;border-radius:var(--rs);padding:12px 14px}
+.skip-entry{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--amber)}
+.skip-collector{font-size:12px;color:var(--muted);margin-top:2px}
+.skip-reason{font-size:13px;color:var(--text);margin-top:6px;line-height:1.4}
+.entry-row{background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer}
+.entry-row:active{background:var(--primary-light)}
+.entry-row-del{background:none;border:1.5px solid var(--red-border);border-radius:8px;padding:5px 9px;font-size:13px;color:var(--red);cursor:pointer;font-family:inherit;flex-shrink:0}
+.filter-chip{padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;font-family:inherit;border:1.5px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer}
+.filter-chip.active{background:var(--primary);border-color:var(--primary);color:#fff}
+
+/* SETTINGS */
+.settings-section{padding:16px 18px 0}
+.settings-section h3{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;margin-top:20px}
+.settings-section h3:first-child{margin-top:0}
+.setting-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.setting-row{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.setting-row:last-child{border-bottom:none}
+.setting-row label{font-size:13px;font-weight:600;min-width:70px;flex-shrink:0;color:var(--muted)}
+.setting-input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'JetBrains Mono',monospace;color:var(--text);background:var(--bg);outline:none}
+.setting-input:focus{border-color:var(--primary)}
+.setting-input.sora{font-family:'Sora',sans-serif}
+.setting-input:read-only{background:#f8fafc;color:var(--muted)}
+.collector-cfg{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
+.cfg-fields{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;align-items:end}
+.cfg-field label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px}
+.cfg-input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px 8px;font-size:13px;color:var(--text);background:var(--bg);outline:none;font-family:inherit}
+.cfg-input:focus{border-color:var(--primary)}
+.cfg-input.mono{font-family:'JetBrains Mono',monospace}
+.ext-link-btn{display:block;width:100%;padding:12px;border-radius:10px;color:#fff;font-size:13px;font-weight:700;text-align:center;text-decoration:none;font-family:'Sora',sans-serif;border:none;cursor:pointer;margin-top:8px}
+
+/* EXPORT */
+.export-area{padding:16px 18px 100px;display:flex;flex-direction:column;gap:12px}
+#csv-preview{width:100%;height:160px;border:1.5px solid var(--border);border-radius:var(--rs);padding:12px;font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--card);color:var(--text);resize:none;outline:none}
+.export-info{background:var(--primary-light);border:1.5px solid var(--primary-border);border-radius:var(--rs);padding:14px;font-size:13px;color:var(--primary);line-height:1.5}
 </style>
 </head>
 <body>
@@ -267,17 +271,20 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
     <label class="field-label">Collector ID</label>
     <input class="field-input mono" type="text" id="login-id" placeholder="e.g. collector1" autocomplete="off" autocapitalize="none">
     <label class="field-label">Password</label>
-    <input class="field-input mono" type="password" id="login-pw" placeholder="••••••••" maxlength="20">
+    <input class="field-input mono" type="password" id="login-pw" placeholder="..." maxlength="20">
     <div class="login-error" id="login-error">Incorrect ID or password.</div>
-    <button class="btn-primary" onclick="doLogin()">Log in →</button>
+    <button class="btn-primary" onclick="doLogin()">Log in</button>
   </div>
 </div>
 
-<!-- HOME (collector) -->
+<!-- HOME -->
 <div id="screen-home" class="screen">
   <div class="topbar">
     <div><div class="topbar-title" id="home-title">PTWR Audit</div><div class="topbar-sub" id="home-date"></div></div>
-    <button class="btn-ghost" onclick="doLogout()">Log out</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn-ghost" onclick="openColSettings()">Settings</button>
+      <button class="btn-ghost" onclick="doLogout()">Log out</button>
+    </div>
   </div>
   <div class="collector-banner">
     <div class="cb-name" id="home-collector"></div>
@@ -291,18 +298,45 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
   <div class="home-actions">
     <button class="action-tile" onclick="startNextEntry()">
       <span class="tile-icon">📋</span>
-      <div class="tile-text"><h3>Start Next Entry</h3><p id="next-entry-label">Loading…</p></div>
+      <div class="tile-text"><h3>Start Next Entry</h3><p id="next-entry-label">Loading...</p></div>
     </button>
   </div>
   <div class="section-head" style="margin-top:4px">Recent entries</div>
   <div class="recent-list" id="recent-list"><div class="empty-state">No entries yet</div></div>
 </div>
 
+<!-- COLLECTOR SETTINGS SHEET -->
+<div class="col-settings-overlay" id="col-settings-overlay">
+  <div class="col-settings-sheet">
+    <div class="detail-header" style="border-radius:20px 20px 0 0">
+      <h2>My Settings</h2>
+      <button class="detail-close" onclick="closeColSettings()">✕</button>
+    </div>
+    <div style="padding:16px 20px 32px;display:flex;flex-direction:column;gap:14px">
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em">My Info</div>
+        <div style="font-size:14px;color:var(--text);margin-bottom:4px">ID: <strong id="col-settings-id"></strong></div>
+        <div style="font-size:14px;color:var(--text)">Range: <strong id="col-settings-range"></strong></div>
+      </div>
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 16px">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:.08em">Change Password</div>
+        <label class="field-label" style="font-size:10px">Current password</label>
+        <input class="field-input mono" type="password" id="col-pw-current" placeholder="Current password" style="margin-bottom:10px;font-size:14px;padding:10px 12px">
+        <label class="field-label" style="font-size:10px">New password</label>
+        <input class="field-input mono" type="password" id="col-pw-new" placeholder="New password" style="margin-bottom:10px;font-size:14px;padding:10px 12px">
+        <label class="field-label" style="font-size:10px">Confirm new password</label>
+        <input class="field-input mono" type="password" id="col-pw-confirm" placeholder="Confirm new password" style="margin-bottom:14px;font-size:14px;padding:10px 12px">
+        <button class="btn-primary amber" onclick="changeCollectorPassword()">Update password</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- SURVEY -->
 <div id="screen-survey" class="screen">
   <div class="survey-nav">
     <div class="snav-left">
-      <button class="btn-ghost" id="btn-back" onclick="prevStep()">← Back</button>
+      <button class="btn-ghost" id="btn-back" onclick="prevStep()">Back</button>
       <span class="snav-prog" id="snav-prog">1 / 3</span>
     </div>
     <button class="snav-close" onclick="closeSurvey()">✕</button>
@@ -310,7 +344,7 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
   <div class="pbar-track"><div class="pbar-fill" id="pbar"></div></div>
   <div class="patient-banner">
     <div>
-      <div class="pb-entry" id="pb-entry">#—</div>
+      <div class="pb-entry" id="pb-entry">#...</div>
       <div class="pb-label">Current entry</div>
     </div>
     <button class="pb-skip" onclick="openModal('skip')">Skip patient</button>
@@ -321,31 +355,31 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
       <div class="step-title">7PPP Template Used?</div>
       <div class="step-desc">Was the standardised 7PPP autotext template used for this PTWR entry?</div>
       <div class="binary-wrap">
-        <button class="bin-btn" id="opt-tmpl-yes" onclick="pickBinary('tmpl','Yes')">✓ &nbsp; Yes — template used</button>
-        <button class="bin-btn" id="opt-tmpl-no"  onclick="pickBinary('tmpl','No')">✗ &nbsp; No — not used</button>
+        <button class="bin-btn" id="opt-tmpl-yes" onclick="pickBinary('tmpl','Yes')">Yes - template used</button>
+        <button class="bin-btn" id="opt-tmpl-no" onclick="pickBinary('tmpl','No')">No - not used</button>
       </div>
     </div>
     <div class="step" id="step-1">
       <div class="step-eyebrow">Step 2 of 3</div>
       <div class="step-title">Domains Documented</div>
       <div class="step-desc">Tick every domain clearly documented in this PTWR note.</div>
-      <button class="check-all-btn" onclick="toggleAll()">☐ &nbsp; Select / deselect all</button>
+      <button class="check-all-btn" onclick="toggleAll()">Select / deselect all</button>
       <div class="checklist" id="domain-checklist"></div>
     </div>
     <div class="step" id="step-2">
-      <div class="step-eyebrow">Step 3 of 3 · Review &amp; Submit</div>
+      <div class="step-eyebrow">Step 3 of 3 - Review and Submit</div>
       <div class="step-title">Summary</div>
       <div class="step-desc">Review before submitting.</div>
       <div class="score-hero">
-        <div class="big-num" id="sum-score">—</div>
-        <div class="big-label">domains documented out of 9</div>
-        <div class="template-tag" id="sum-tmpl-tag">—</div>
+        <div class="big-num" id="sum-score">...</div>
+        <div class="big-label">domains documented out of 6</div>
+        <div class="template-tag" id="sum-tmpl-tag">...</div>
       </div>
       <div class="sum-card" id="sum-table"></div>
     </div>
   </div>
   <div class="survey-footer">
-    <button class="btn-primary" id="btn-next" onclick="nextStep()">Next →</button>
+    <button class="btn-primary" id="btn-next" onclick="nextStep()">Next</button>
   </div>
 </div>
 
@@ -365,21 +399,18 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
     <button class="tab-btn" onclick="switchTab('settings')">Settings</button>
   </div>
 
-  <!-- OVERVIEW TAB -->
   <div class="tab-panel active" id="tab-overview">
-    <div class="overview-wrap" id="overview-wrap"></div>
+    <div class="overview-wrap" id="overview-wrap"><div style="text-align:center;padding:40px 0;color:var(--muted);font-size:14px">Loading...</div></div>
   </div>
 
-  <!-- COLLECTORS TAB -->
   <div class="tab-panel" id="tab-collectors">
     <div id="collector-list-view" style="padding:14px 18px;display:flex;flex-direction:column;gap:8px"></div>
     <div id="collector-detail-view" style="display:none;padding:14px 18px 80px">
-      <button class="btn-ghost" style="margin-bottom:16px" onclick="closeCollectorDetail()">← All collectors</button>
+      <button class="btn-ghost" style="margin-bottom:16px" onclick="closeCollectorDetail()">Back to all collectors</button>
       <div id="collector-detail-content"></div>
     </div>
   </div>
 
-  <!-- ENTRIES TAB -->
   <div class="tab-panel" id="tab-entries">
     <div style="padding:12px 18px 8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">
       <span style="font-size:12px;font-weight:700;color:var(--muted);margin-right:4px">Filter:</span>
@@ -389,10 +420,9 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
       <span id="entries-count" style="font-size:13px;color:var(--muted)"></span>
       <button class="btn-ghost" style="font-size:12px;color:var(--red);border-color:var(--red-border)" onclick="openModal('clearall')">Clear all data</button>
     </div>
-    <!-- skipped collapsible -->
     <div style="padding:0 18px 8px">
       <div class="skip-toggle" onclick="toggleSkippedSection()" id="skip-toggle-header">
-        <span style="font-size:13px;font-weight:700;color:var(--amber)">⚠ Skipped entries &nbsp;<span id="skipped-badge" style="font-family:'JetBrains Mono',monospace"></span></span>
+        <span style="font-size:13px;font-weight:700;color:var(--amber)">Skipped entries <span id="skipped-badge" style="font-family:'JetBrains Mono',monospace"></span></span>
         <span id="skip-chevron">▼</span>
       </div>
       <div id="skipped-section" style="display:none;flex-direction:column;gap:8px">
@@ -402,38 +432,61 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
     <div style="padding:0 18px;display:flex;flex-direction:column;gap:8px;padding-bottom:40px" id="admin-entries"></div>
   </div>
 
-  <!-- SETTINGS TAB -->
   <div class="tab-panel" id="tab-settings">
     <div class="settings-section">
-      <h3>Collectors (ID · Password · Range)</h3>
-      <div id="collector-cfg-list"></div>
-      <button class="btn-primary amber" style="margin-bottom:24px" onclick="saveCollectorSettings()">Save collector settings</button>
-      <h3>Admin credentials</h3>
-      <div class="setting-card">
-        <div class="setting-row"><label>New ID</label><input class="setting-input sora" type="text" id="new-admin-id" placeholder="admin"></div>
-        <div class="setting-row"><label>New PW</label><input class="setting-input mono" type="text" id="new-admin-pw" placeholder="new password"></div>
-        <div style="padding:0 16px 14px"><button class="btn-primary amber" onclick="saveAdminCreds()">Update admin credentials</button></div>
-      </div>
-      <h3>Google Sheets link</h3>
+      <h3>Total Patients</h3>
       <div class="setting-card" style="padding:14px 16px;margin-bottom:16px">
-        <p style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5">Open the live Google Sheet to share with your co-investigator.</p>
-        <button class="excel-btn" style="background:var(--green)" onclick="window.open('https://docs.google.com/spreadsheets/d/1tpCU3kHWpAcLbyK9aiTs1PjMYyEHYlwzGL-nOc5y9z8/edit','_blank')">📊 Open Google Sheet</button>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:10px;line-height:1.5">Total number of patients in the audit. Used to calculate overall completion %.</p>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input class="setting-input" type="number" id="total-patients-input" style="flex:1;font-size:16px;padding:10px" placeholder="e.g. 847">
+          <button class="btn-primary amber" style="width:auto;padding:10px 18px;font-size:14px" onclick="saveTotalPatients()">Save</button>
+        </div>
+      </div>
+
+      <h3 style="display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleCollectorSettings()">
+        <span>Collectors (ID - Password - Range)</span>
+        <span id="col-settings-chevron" style="font-size:12px;color:var(--muted)">▼ Show</span>
+      </h3>
+      <div id="collector-cfg-list" style="display:none"></div>
+      <div id="collector-cfg-save" style="display:none;margin-bottom:24px">
+        <button class="btn-primary amber" onclick="saveCollectorSettings()">Save collector settings</button>
+      </div>
+
+      <h3>Admin Credentials</h3>
+      <div class="setting-card">
+        <div class="setting-row">
+          <label>ID</label>
+          <input class="setting-input sora" type="text" id="admin-id-display" readonly style="background:#f8fafc;color:var(--muted)">
+        </div>
+        <div class="setting-row">
+          <label>New password</label>
+          <input class="setting-input mono" type="text" id="new-admin-pw" placeholder="new password">
+        </div>
+        <div style="padding:0 16px 14px">
+          <button class="btn-primary amber" onclick="saveAdminCreds()">Update admin password</button>
+        </div>
+      </div>
+
+      <h3>Quick Links</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+        <button class="ext-link-btn" style="background:#15803d" onclick="window.open('https://docs.google.com/spreadsheets/d/1tpCU3kHWpAcLbyK9aiTs1PjMYyEHYlwzGL-nOc5y9z8/edit','_blank')">Open Google Sheet</button>
+        <button class="ext-link-btn" style="background:#1d4ed8" onclick="window.open('https://supabase.com/dashboard/project/tiwpcwecvtiaabczalkn/editor/17547?schema=public','_blank')">Open Supabase (entries)</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- EXPORT (admin only, hidden from collectors) -->
+<!-- EXPORT -->
 <div id="screen-export" class="screen">
   <div class="topbar">
     <div><div class="topbar-title">Export Data</div><div class="topbar-sub" id="export-count-label"></div></div>
-    <button class="btn-ghost" onclick="showPrev()">← Back</button>
+    <button class="btn-ghost" onclick="showPrev()">Back</button>
   </div>
   <div class="export-area">
-    <div class="export-info">Download as CSV, then open in Excel — File → Open → select the .csv file.</div>
+    <div class="export-info">Download as CSV then open in Excel.</div>
     <textarea id="csv-preview" readonly></textarea>
-    <button class="btn-primary" onclick="downloadCSV()">⬇ Download CSV</button>
-    <button class="btn-primary grey" onclick="copyCSV()">⎘ Copy to clipboard</button>
+    <button class="btn-primary" onclick="downloadCSV()">Download CSV</button>
+    <button class="btn-primary grey" onclick="copyCSV()">Copy to clipboard</button>
   </div>
 </div>
 
@@ -442,7 +495,7 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
   <div class="modal-box">
     <div class="modal-title" id="modal-title"></div>
     <div class="modal-desc" id="modal-desc"></div>
-    <textarea class="modal-textarea" id="modal-textarea" placeholder="" style="display:none"></textarea>
+    <textarea class="modal-textarea" id="modal-textarea" style="display:none"></textarea>
     <div class="modal-btns">
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-confirm" id="modal-confirm-btn" onclick="modalConfirm()"></button>
@@ -450,70 +503,91 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
   </div>
 </div>
 
+<!-- ENTRY DETAIL SHEET -->
+<div class="detail-overlay" id="detail-overlay">
+  <div class="detail-sheet">
+    <div class="detail-handle"></div>
+    <div class="detail-header">
+      <h2 id="detail-title">Entry Details</h2>
+      <button class="detail-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="detail-body" id="detail-body"></div>
+  </div>
+</div>
+
 <script>
 const DOMAINS=[
-  {key:"diag",   label:"Working Diagnosis",          hint:"Clinical diagnosis, not just symptoms"},
-  {key:"dta",    label:"DTA / Destination Ward",     hint:"Appropriate ward documented"},
-  {key:"ix",     label:"Investigations",             hint:"All planned/outstanding tests listed"},
-  {key:"meds",   label:"Medications",                hint:"Changes + rationale, abx specified, regular meds reviewed"},
-  {key:"vte",    label:"VTE Prophylaxis",            hint:"Decision documented clearly (not just 'VTEp')"},
-  {key:"spec",   label:"Specialty Input",            hint:"Referrals with rationale, or N/A if none needed"},
-  {key:"nursing",label:"Nursing Care Instructions",  hint:"Clear actionable tasks: obs, bloods, fluid balance, CBG…"},
-  {key:"resus",  label:"Resuscitation Status",       hint:"Escalation reviewed, RESPECT/TEP completed"},
-  {key:"pdd",    label:"Predicted Date of Discharge",hint:"PDD with clear discharge criteria"},
+  {key:"resus",    label:"Resuscitation Status",                          hint:"Escalation reviewed, RESPECT/TEP completed", scored:true},
+  {key:"pdd",      label:"Predicted Date of Discharge",                   hint:"PDD documented", scored:true},
+  {key:"dc",       label:"Discharge Criteria Documented",                 hint:"Clear clinical goals for discharge stated", scored:true},
+  {key:"regmeds",  label:"Regular Medications Reviewed",                  hint:"Regular medications reviewed, prescribed or suspended", scored:true},
+  {key:"abx",      label:"Antibiotic Plan Documented",                    hint:"Antibiotic name stated clearly (not just IV abx)", scored:true},
+  {key:"vte",      label:"VTE Prophylaxis",                               hint:"Decision documented clearly (not just VTEp)", scored:true},
+  {key:"dta",      label:"DTA / Destination Ward",                        hint:"Appropriate destination ward documented", scored:false},
 ];
+const SCORED_DOMAINS=DOMAINS.filter(d=>d.scored);
 const TOTAL_STEPS=3;
-const DEFAULT_COLLECTORS=Array.from({length:20},(_,i)=>({id:`collector${i+1}`,pw:`7ppp2026`,from:(i*50)+1,to:(i+1)*50}));
+const DEFAULT_COLLECTORS=Array.from({length:20},(_,i)=>({id:`collector${i+1}`,pw:`ptwr${i+1}`,from:(i*50)+1,to:(i+1)*50}));
 const DEFAULT_ADMIN={id:'admin',pw:'ganeshpure'};
+const DEFAULT_TOTAL_PATIENTS=1000;
 
-// ─── GOOGLE SHEETS CONFIG ──────────────────
-const GS_URL='https://script.google.com/macros/s/AKfycbzaf1tKWiCzbb8I_auA7x5-6tyhPyZF6bKcwoieBBuY9HX13cq9UN9_dcwMKIVBmliz/exec';
-
-// Supabase config (primary — fast, awaited)
+// SUPABASE
 const SB_URL='https://tiwpcwecvtiaabczalkn.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpd3Bjd2VjdnRpYWFiY3phbGtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODg0OTMsImV4cCI6MjA5NDg2NDQ5M30.w9BdiBqt6_QpdHtIh2Q-vBNtdCeEFwb1jrD3ZTdt51I';
 const SB_H={'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
 
-// Google Sheets — fire and forget (background, don't await)
-function gsInsert(row){
-  fetch(GS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(row),mode:'no-cors'})
-    .catch(e=>console.warn('GS insert error:',e));
-}
-function gsDelete(entry,collector){
-  fetch(GS_URL,{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({_action:'delete',entry,collector}),mode:'no-cors'})
-    .catch(e=>console.warn('GS delete error:',e));
-}
+// GOOGLE SHEETS
+const GS_URL='https://script.google.com/macros/s/AKfycbzaf1tKWiCzbb8I_auA7x5-6tyhPyZF6bKcwoieBBuY9HX13cq9UN9_dcwMKIVBmliz/exec';
+
+function gsInsert(row){fetch(GS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(row),mode:'no-cors'}).catch(e=>console.warn('GS insert:',e))}
+function gsDelete(entry,collector){fetch(GS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({_action:'delete',entry,collector}),mode:'no-cors'}).catch(e=>console.warn('GS delete:',e))}
 
 async function sbInsert(row){
-  try{
-    const r=await fetch(SB_URL+'/rest/v1/entries',{method:'POST',headers:{...SB_H,'Prefer':'return=minimal'},body:JSON.stringify(row)});
-    if(!r.ok)console.warn('SB insert failed:',await r.text());
-  }catch(e){console.warn('SB insert error:',e)}
+  try{const r=await fetch(SB_URL+'/rest/v1/entries',{method:'POST',headers:{...SB_H,'Prefer':'return=minimal'},body:JSON.stringify(row)});if(!r.ok)console.warn('SB insert:',await r.text())}catch(e){console.warn('SB insert:',e)}
 }
 async function sbFetchAll(){
-  try{
-    const r=await fetch(SB_URL+'/rest/v1/entries?select=*&order=entry.asc',{headers:SB_H});
-    if(!r.ok){console.warn('SB fetch failed');return null}
-    return await r.json();
-  }catch(e){console.warn('SB fetch error:',e);return null}
+  try{const r=await fetch(SB_URL+'/rest/v1/entries?select=*&order=entry.asc',{headers:SB_H});if(!r.ok)return null;return await r.json()}catch(e){return null}
 }
 async function sbDeleteRow(entry,collector){
-  try{
-    const r=await fetch(SB_URL+'/rest/v1/entries?entry=eq.'+entry+'&collector=eq.'+encodeURIComponent(collector),{method:'DELETE',headers:SB_H});
-    if(!r.ok)console.warn('SB delete failed:',await r.text());
-  }catch(e){console.warn('SB delete error:',e)}
-  // also fire GS delete in background
+  try{const r=await fetch(SB_URL+'/rest/v1/entries?entry=eq.'+entry+'&collector=eq.'+encodeURIComponent(collector),{method:'DELETE',headers:SB_H});if(!r.ok)console.warn('SB delete:',await r.text())}catch(e){console.warn('SB delete:',e)}
   gsDelete(entry,collector);
 }
 async function sbFetchMine(cid){
-  try{
-    const r=await fetch(SB_URL+'/rest/v1/entries?select=*&collector=eq.'+encodeURIComponent(cid)+'&order=entry.asc',{headers:SB_H});
-    if(!r.ok)return null;
-    return await r.json();
-  }catch(e){return null}
+  try{const r=await fetch(SB_URL+'/rest/v1/entries?select=*&collector=eq.'+encodeURIComponent(cid)+'&order=entry.asc',{headers:SB_H});if(!r.ok)return null;return await r.json()}catch(e){return null}
 }
 
+// CONFIG
+function getTotalPatients(){return parseInt(localStorage.getItem('ptwr_total_patients'))||DEFAULT_TOTAL_PATIENTS}
+function getCollectors(){return load('ptwr_collectors')||DEFAULT_COLLECTORS}
+function getAdmin(){return load('ptwr_admin')||DEFAULT_ADMIN}
+
+async function fetchAllConfig(){
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/config?select=key,value',{headers:SB_H});
+    if(!r.ok)return;
+    const data=await r.json();
+    data.forEach(row=>{
+      if(row.key==='collectors'&&row.value&&row.value!=='null'){
+        try{const cols=JSON.parse(row.value);if(Array.isArray(cols)&&cols.length>0)save('ptwr_collectors',cols)}catch(e){}
+      }
+      if(row.key==='total_patients'&&row.value)localStorage.setItem('ptwr_total_patients',row.value);
+      if(row.key==='admin'&&row.value&&row.value!=='null'){
+        try{const a=JSON.parse(row.value);if(a&&a.id&&a.pw)save('ptwr_admin',a)}catch(e){}
+      }
+    });
+  }catch(e){console.warn('Config fetch:',e)}
+}
+
+async function pushConfig(key,value){
+  try{
+    const r=await fetch(SB_URL+'/rest/v1/config?key=eq.'+key,{method:'PATCH',headers:{...SB_H,'Prefer':'return=minimal'},body:JSON.stringify({value:String(value)})});
+    if(!r.ok){
+      await fetch(SB_URL+'/rest/v1/config',{method:'POST',headers:{...SB_H,'Prefer':'return=minimal'},body:JSON.stringify({key,value:String(value)})});
+    }
+  }catch(e){console.warn('Config push:',e)}
+}
+
+// STATE
 let currentUser=null;
 let currentStep=0;
 let currentEntry=null;
@@ -521,20 +595,15 @@ let answers={};
 let prevScreen='screen-home';
 let entries=load('ptwr_entries')||[];
 let skipped=load('ptwr_skipped')||[];
-// admin views fetch from Supabase into these
-let sbAll=[];
-let sbEntries=[];
-let sbSkipped=[];
-let breakdownVisible=true;
+let sbAll=[];let sbEntries=[];let sbSkipped=[];
 let skippedSectionOpen=false;
 let activeFilter='all';
 let modalMode='';
 let pendingDeleteRow=null;
+let collectorSettingsOpen=false;
+let notStartedOpen=false;
 
-function getCollectors(){return load('ptwr_collectors')||DEFAULT_COLLECTORS}
-function getAdmin(){return load('ptwr_admin')||DEFAULT_ADMIN}
-
-// build checklist once
+// INIT
 function buildChecklist(){
   document.getElementById('domain-checklist').innerHTML=DOMAINS.map(d=>`
     <div class="chk-item" id="chk-${d.key}" onclick="toggleDomain('${d.key}')">
@@ -544,13 +613,13 @@ function buildChecklist(){
 }
 buildChecklist();
 
-
-// ─── AUTH ──────────────────────────────────
-function doLogin(){
+// AUTH
+async function doLogin(){
   const id=document.getElementById('login-id').value.trim().toLowerCase();
   const pw=document.getElementById('login-pw').value;
   const err=document.getElementById('login-error');
   err.style.display='none';
+  await fetchAllConfig();
   const admin=getAdmin();
   if(id===admin.id&&pw===admin.pw){currentUser={isAdmin:true};showAdmin();return}
   const col=getCollectors().find(c=>c.id===id&&c.pw===pw);
@@ -559,6 +628,7 @@ function doLogin(){
 }
 document.getElementById('login-pw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 document.getElementById('login-id').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login-pw').focus()});
+
 function doLogout(){
   currentUser=null;
   document.getElementById('login-id').value='';
@@ -567,28 +637,25 @@ function doLogout(){
   show('screen-login');
 }
 
-// ─── HOME ──────────────────────────────────
+// HOME
 async function showHome(){
-  const {from,to,id}=currentUser;
+  const{from,to,id}=currentUser;
   document.getElementById('home-date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
   document.getElementById('home-collector').textContent=id;
-  document.getElementById('home-range').textContent=`Assigned entries: ${from}–${to}`;
-  // fetch my entries from Supabase to stay in sync across devices
+  document.getElementById('home-range').textContent=`Assigned entries: ${from} to ${to}`;
   const remote=await sbFetchMine(id);
   if(remote){
-    const remoteSubmitted=remote.filter(r=>r.status==='Submitted');
-    const remoteSkipped=remote.filter(r=>r.status==='Skipped');
-    // merge into local cache (add any not already present)
-    remoteSubmitted.forEach(r=>{if(!entries.find(e=>e.entry===r.entry&&e.collector===r.collector))entries.push(r)});
-    remoteSkipped.forEach(r=>{if(!skipped.find(e=>e.entry===r.entry&&e.collector===r.collector))skipped.push(r)});
+    const rs=remote.filter(r=>r.status==='Submitted');
+    const rsk=remote.filter(r=>r.status==='Skipped');
+    rs.forEach(r=>{if(!entries.find(e=>e.entry===r.entry&&e.collector===r.collector))entries.push(r)});
+    rsk.forEach(r=>{if(!skipped.find(e=>e.entry===r.entry&&e.collector===r.collector))skipped.push(r)});
     save('ptwr_entries',entries);save('ptwr_skipped',skipped);
   }
   const done=entries.filter(e=>e.collector===id).length;
   const sk=skipped.filter(s=>s.collector===id).length;
-  const total=(to-from+1);
   document.getElementById('stat-done').textContent=done;
   document.getElementById('stat-skipped').textContent=sk;
-  document.getElementById('stat-remaining').textContent=Math.max(0,total-done-sk);
+  document.getElementById('stat-remaining').textContent=Math.max(0,(to-from+1)-done-sk);
   const next=nextEntry();
   document.getElementById('next-entry-label').textContent=next?`Next: Entry #${next}`:'All entries complete!';
   renderRecent();
@@ -597,7 +664,7 @@ async function showHome(){
 }
 
 function nextEntry(){
-  const {from,to,id}=currentUser;
+  const{from,to,id}=currentUser;
   const done=new Set([...entries.filter(e=>e.collector===id).map(e=>e.entry),...skipped.filter(s=>s.collector===id).map(s=>s.entry)]);
   for(let i=from;i<=to;i++){if(!done.has(i))return i}
   return null;
@@ -612,13 +679,41 @@ function renderRecent(){
   const el=document.getElementById('recent-list');
   if(!all.length){el.innerHTML='<div class="empty-state">No entries yet</div>';return}
   el.innerHTML=all.map(e=>{
-    if(e.type==='skipped')return`<div class="recent-row"><div><div class="rr-id">Entry #${e.entry}</div><div class="rr-meta">${fmtDate(e.timestamp)}</div></div><span class="rr-badge skipped">Skipped</span></div>`;
-    const score=DOMAINS.filter(d=>e[d.key]==='Yes').length;
-    return`<div class="recent-row"><div><div class="rr-id">Entry #${e.entry}</div><div class="rr-meta">${e.template==='Yes'?'7PPP ✓':'7PPP ✗'} · ${fmtDate(e.timestamp)}</div></div><span class="rr-badge ${score===9?'':'partial'}">${score}/9</span></div>`;
+    if(e.type==='skipped')return`<div class="recent-row" onclick="showEntryDetail(${JSON.stringify(e).replace(/"/g,'&quot;')})"><div><div class="rr-id">Entry #${e.entry}</div><div class="rr-meta">${fmtDate(e.timestamp)}</div></div><span class="rr-badge skipped">Skipped</span></div>`;
+    const score=SCORED_DOMAINS.filter(d=>e[d.key]==='Yes').length;
+    return`<div class="recent-row" onclick="showEntryDetail(${JSON.stringify(e).replace(/"/g,'&quot;')})"><div><div class="rr-id">Entry #${e.entry}</div><div class="rr-meta">${e.template==='Yes'?'7PPP':'No 7PPP'} - ${fmtDate(e.timestamp)}</div></div><span class="rr-badge ${score===6?'':'partial'}">${score}/6</span></div>`;
   }).join('');
 }
 
-// ─── SURVEY ────────────────────────────────
+// COLLECTOR SETTINGS
+function openColSettings(){
+  const{id,from,to}=currentUser;
+  document.getElementById('col-settings-id').textContent=id;
+  document.getElementById('col-settings-range').textContent=`${from} to ${to}`;
+  document.getElementById('col-pw-current').value='';
+  document.getElementById('col-pw-new').value='';
+  document.getElementById('col-pw-confirm').value='';
+  document.getElementById('col-settings-overlay').classList.add('open');
+}
+function closeColSettings(){document.getElementById('col-settings-overlay').classList.remove('open')}
+
+async function changeCollectorPassword(){
+  const current=document.getElementById('col-pw-current').value;
+  const newpw=document.getElementById('col-pw-new').value;
+  const confirm=document.getElementById('col-pw-confirm').value;
+  const cols=getCollectors();
+  const col=cols.find(c=>c.id===currentUser.id);
+  if(!col||col.pw!==current){alert('Current password is incorrect.');return}
+  if(!newpw){alert('Please enter a new password.');return}
+  if(newpw!==confirm){alert('New passwords do not match.');return}
+  col.pw=newpw;
+  save('ptwr_collectors',cols);
+  await pushConfig('collectors',JSON.stringify(cols));
+  closeColSettings();
+  alert('Password updated successfully!');
+}
+
+// SURVEY
 function startNextEntry(){
   const next=nextEntry();
   if(!next){alert('All entries in your range are complete!');return}
@@ -637,8 +732,8 @@ function gotoStep(n){
   document.getElementById('pbar').style.width=`${(n/(TOTAL_STEPS-1))*100}%`;
   document.getElementById('btn-back').disabled=n===0;
   const btn=document.getElementById('btn-next');
-  if(n===TOTAL_STEPS-1){btn.textContent='Submit Entry ✓';btn.className='btn-primary green';buildSummary()}
-  else{btn.textContent='Next →';btn.className='btn-primary'}
+  if(n===TOTAL_STEPS-1){btn.textContent='Submit Entry';btn.className='btn-primary green';buildSummary()}
+  else{btn.textContent='Next';btn.className='btn-primary'}
 }
 function nextStep(){if(currentStep===TOTAL_STEPS-1){submitEntry();return}if(!validate())return;gotoStep(currentStep+1)}
 function prevStep(){if(currentStep>0)gotoStep(currentStep-1)}
@@ -649,68 +744,61 @@ function pickBinary(key,val){
   document.getElementById('opt-'+key+'-yes').className='bin-btn'+(val==='Yes'?' sel-yes':'');
   document.getElementById('opt-'+key+'-no').className='bin-btn'+(val==='No'?' sel-no':'');
 }
-function toggleDomain(key){
-  const el=document.getElementById('chk-'+key);el.classList.toggle('checked');
-  answers[key]=el.classList.contains('checked')?'Yes':'No';
-}
+function toggleDomain(key){const el=document.getElementById('chk-'+key);el.classList.toggle('checked');answers[key]=el.classList.contains('checked')?'Yes':'No'}
 function toggleAll(){
   const all=DOMAINS.every(d=>document.getElementById('chk-'+d.key).classList.contains('checked'));
   DOMAINS.forEach(d=>{const el=document.getElementById('chk-'+d.key);if(all){el.classList.remove('checked');answers[d.key]='No'}else{el.classList.add('checked');answers[d.key]='Yes'}});
 }
 function buildSummary(){
-  const score=DOMAINS.filter(d=>answers[d.key]==='Yes').length;
+  const score=SCORED_DOMAINS.filter(d=>answers[d.key]==='Yes').length;
   document.getElementById('sum-score').textContent=score;
   const yes=answers.tmpl==='Yes';
   const tag=document.getElementById('sum-tmpl-tag');
-  tag.textContent=yes?'7PPP Template Used ✓':'7PPP Template Not Used ✗';
+  tag.textContent=yes?'7PPP Template Used':'7PPP Template Not Used';
   tag.className='template-tag '+(yes?'yes':'no');
   document.getElementById('sum-table').innerHTML=DOMAINS.map(d=>{
     const y=answers[d.key]==='Yes';
-    return`<div class="sum-row"><span class="sum-row-label">${d.label}</span><span class="sum-row-tick ${y?'tick':'cross'}">${y?'✓':'✗'}</span></div>`;
+    return`<div class="sum-row"><span class="sum-row-label">${d.label}${d.scored?'':' <span style="font-size:11px;color:var(--muted)">(extra)</span>'}</span><span class="sum-row-tick ${y?'tick':'cross'}">${y?'✓':'✗'}</span></div>`;
   }).join('');
 }
 async function submitEntry(){
   const entry={collector:currentUser.id,timestamp:new Date().toISOString(),entry:currentEntry,
     template:answers.tmpl||'No',...Object.fromEntries(DOMAINS.map(d=>[d.key,answers[d.key]||'No'])),
-    domains_documented:DOMAINS.filter(d=>answers[d.key]==='Yes').length,status:'Submitted',skip_reason:''};
+    domains_documented:SCORED_DOMAINS.filter(d=>answers[d.key]==='Yes').length,status:'Submitted',skip_reason:''};
   entries.push(entry);save('ptwr_entries',entries);
-  // push to Supabase (awaited — fast)
   await sbInsert(entry);
-  // push to Google Sheets (fire and forget — background)
   gsInsert(entry);
-
-  alert(`✓ Entry #${currentEntry} saved — ${entry.domains_documented}/9 domains`);
+  alert(`Entry #${currentEntry} saved - ${entry.domains_documented}/9 domains`);
   showHome();
 }
 
-// ─── MODAL ─────────────────────────────────
+// MODAL
 function openModal(mode){
   modalMode=mode;
-  const overlay=document.getElementById('modal-overlay');
   const title=document.getElementById('modal-title');
   const desc=document.getElementById('modal-desc');
   const ta=document.getElementById('modal-textarea');
-  const confirmBtn=document.getElementById('modal-confirm-btn');
+  const btn=document.getElementById('modal-confirm-btn');
   if(mode==='skip'){
     title.textContent='Skip this patient?';
-    desc.textContent='Please give a brief reason — this will be flagged to the administrator.';
-    ta.placeholder='e.g. Note not yet written, patient still on ward round…';
+    desc.textContent='Please give a brief reason. This will be flagged to the administrator.';
+    ta.placeholder='e.g. PTWR not done by surgeons / PTWR not yet written / Patient discharged before review';
     ta.value='';ta.style.display='block';
-    confirmBtn.textContent='Skip patient';confirmBtn.className='modal-confirm';
-  } else if(mode==='delete'){
+    btn.textContent='Skip patient';btn.className='modal-confirm';
+  }else if(mode==='delete'){
     title.textContent='Delete this entry?';
-    desc.textContent='This will remove it from the local app only. It will NOT be removed from the Excel spreadsheet — you will need to delete it there manually.';
+    desc.textContent='This removes it from the app and Supabase only. To remove it from Excel, delete the row manually there.';
     ta.style.display='none';
-    confirmBtn.textContent='Delete';confirmBtn.className='modal-confirm red';
-  } else if(mode==='clearall'){
+    btn.textContent='Delete';btn.className='modal-confirm red';
+  }else if(mode==='clearall'){
     title.textContent='Clear all data?';
-    desc.textContent='This deletes all submitted and skipped entries from this device only. The Excel spreadsheet will not be affected. This cannot be undone.';
+    desc.textContent='This deletes all submitted and skipped entries from this device and Supabase. The Excel spreadsheet will not be affected.';
     ta.style.display='none';
-    confirmBtn.textContent='Clear all';confirmBtn.className='modal-confirm red';
+    btn.textContent='Clear all';btn.className='modal-confirm red';
   }
-  overlay.classList.add('open');
+  document.getElementById('modal-overlay').classList.add('open');
 }
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');pendingDeleteIdx=null}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');pendingDeleteRow=null}
 async function modalConfirm(){
   if(modalMode==='skip'){
     const reason=document.getElementById('modal-textarea').value.trim();
@@ -720,10 +808,9 @@ async function modalConfirm(){
     closeModal();
     await sbInsert(record);
     gsInsert(record);
-
     showHome();
-  } else if(modalMode==='delete'&&pendingDeleteRow!==null){
-    if(pendingDeleteRow) await sbDeleteRow(pendingDeleteRow.entry, pendingDeleteRow.collector);
+  }else if(modalMode==='delete'&&pendingDeleteRow!==null){
+    if(pendingDeleteRow)await sbDeleteRow(pendingDeleteRow.entry,pendingDeleteRow.collector);
     sbEntries=sbEntries.filter(e=>e!==pendingDeleteRow);
     sbSkipped=sbSkipped.filter(e=>e!==pendingDeleteRow);
     sbAll=sbAll.filter(e=>e!==pendingDeleteRow);
@@ -731,33 +818,54 @@ async function modalConfirm(){
     skipped=skipped.filter(e=>!(e.entry===pendingDeleteRow.entry&&e.collector===pendingDeleteRow.collector));
     save('ptwr_entries',entries);save('ptwr_skipped',skipped);
     closeModal();renderAdminEntries();renderAdmin();
-  } else if(modalMode==='clearall'){
-    // delete all from Supabase (batch delete)
-    try{
-      await fetch(SB_URL+'/rest/v1/entries?entry=gte.0',{method:'DELETE',headers:SB_H});
-    }catch(e){console.warn('SB clear all failed',e)}
-    // delete all from Google Sheets in one request (fire and forget)
-    fetch(GS_URL,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({_action:'clearall'}),mode:'no-cors'})
-      .catch(e=>console.warn('GS clear all failed',e));
-    // clear local cache
+  }else if(modalMode==='clearall'){
+    try{await fetch(SB_URL+'/rest/v1/entries?entry=gte.0',{method:'DELETE',headers:SB_H})}catch(e){console.warn('SB clear:',e)}
+    fetch(GS_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({_action:'clearall'}),mode:'no-cors'}).catch(e=>console.warn(e));
     entries=[];skipped=[];sbAll=[];sbEntries=[];sbSkipped=[];
     save('ptwr_entries',entries);save('ptwr_skipped',skipped);
     closeModal();renderAdmin();renderAdminEntries();
   }
 }
 
-// ─── ADMIN ─────────────────────────────────
+// ENTRY DETAIL
+function showEntryDetail(entry){
+  if(typeof entry==='string'){try{entry=JSON.parse(entry)}catch(e){return}}
+  const score=SCORED_DOMAINS.filter(d=>entry[d.key]==='Yes').length;
+  const isSkipped=entry.status==='Skipped';
+  document.getElementById('detail-title').textContent=`Entry #${entry.entry}`;
+  document.getElementById('detail-body').innerHTML=`
+    ${isSkipped?`
+      <div style="background:var(--amber-light);border:1.5px solid #fcd34d;border-radius:var(--r);padding:18px;text-align:center;margin-bottom:16px">
+        <div style="font-size:32px;font-weight:800;color:var(--amber)">Skipped</div>
+        <div style="font-size:13px;color:var(--amber);margin-top:6px;line-height:1.4">${entry.skip_reason||''}</div>
+      </div>`:`
+      <div class="detail-hero">
+        <div class="detail-score">${score}/9</div>
+        <div class="detail-sublabel">core domains documented (out of 6)</div>
+        <div class="detail-tmpl ${entry.template==='Yes'?'yes':'no'}">${entry.template==='Yes'?'7PPP Template Used':'7PPP Template Not Used'}</div>
+      </div>`}
+    <div class="detail-meta">
+      <span>${entry.collector}</span>
+      <span>${fmtDate(entry.timestamp)}</span>
+    </div>
+    ${isSkipped?'':`<div class="detail-domains">${DOMAINS.map(d=>{
+      const yes=entry[d.key]==='Yes';
+      return`<div class="detail-domain-row">
+        <span class="detail-domain-label">${d.label}</span>
+        <span class="detail-domain-val ${yes?'yes':'no'}">${yes?'Yes':'No'}</span>
+      </div>`;
+    }).join('')}</div>`}`;
+  document.getElementById('detail-overlay').classList.add('open');
+}
+function closeDetail(){document.getElementById('detail-overlay').classList.remove('open')}
+
+// ADMIN
 async function showAdmin(){
   document.getElementById('admin-date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
   prevScreen='screen-admin';show('screen-admin');
-  document.getElementById('overview-wrap').innerHTML='<div style="text-align:center;padding:40px 0;color:var(--muted);font-size:14px">Loading data…</div>';
+  document.getElementById('overview-wrap').innerHTML='<div style="text-align:center;padding:40px 0;color:var(--muted);font-size:14px">Loading data...</div>';
   const all=await sbFetchAll();
-  if(all){
-    sbAll=all;
-    sbEntries=all.filter(r=>r.status==='Submitted');
-    sbSkipped=all.filter(r=>r.status==='Skipped');
-  }
+  if(all){sbAll=all;sbEntries=all.filter(r=>r.status==='Submitted');sbSkipped=all.filter(r=>r.status==='Skipped')}
   renderAdmin();
 }
 
@@ -766,51 +874,40 @@ function switchTab(tab){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
   if(tab==='overview'){
-    document.getElementById('overview-wrap').innerHTML='<div style="text-align:center;padding:40px 0;color:var(--muted);font-size:14px">Loading data…</div>';
-    sbFetchAll().then(all=>{if(all){sbAll=all;sbEntries=all.filter(r=>r.status==='Submitted');sbSkipped=all.filter(r=>r.status==='Skipped')}renderAdmin();});
+    document.getElementById('overview-wrap').innerHTML='<div style="text-align:center;padding:40px 0;color:var(--muted);font-size:14px">Loading...</div>';
+    sbFetchAll().then(all=>{if(all){sbAll=all;sbEntries=all.filter(r=>r.status==='Submitted');sbSkipped=all.filter(r=>r.status==='Skipped')}renderAdmin()});
   }
-  if(tab==='collectors'){
-    sbFetchAll().then(all=>{if(all){sbAll=all;sbEntries=all.filter(r=>r.status==='Submitted');sbSkipped=all.filter(r=>r.status==='Skipped')}renderCollectorList();});
-  }
-  if(tab==='entries'){activeFilter='all';sbFetchAll().then(all=>{if(all){sbAll=all;sbEntries=all.filter(r=>r.status==='Submitted');sbSkipped=all.filter(r=>r.status==='Skipped')}renderAdminEntries();});}
+  if(tab==='collectors'){sbFetchAll().then(all=>{if(all){sbAll=all;sbEntries=all.filter(r=>r.status==='Submitted');sbSkipped=all.filter(r=>r.status==='Skipped')}renderCollectorList()})}
+  if(tab==='entries'){activeFilter='all';sbFetchAll().then(all=>{if(all){sbAll=all;sbEntries=all.filter(r=>r.status==='Submitted');sbSkipped=all.filter(r=>r.status==='Skipped')}renderAdminEntries()})}
   if(tab==='settings')renderSettings();
 }
 
 function renderAdmin(){
-  const total=sbEntries.length;
-  const totalSk=sbSkipped.length;
-  const cols=getCollectors();
-  const totalAssigned=cols.reduce((a,c)=>(c.to-c.from+1)+a,0);
-  const completionPct=totalAssigned?Math.round(total/totalAssigned*100):0;
+  const total=sbEntries.length;const totalSk=sbSkipped.length;
+  const totalPatients=getTotalPatients();
+  const completionPct=totalPatients?Math.round(total/totalPatients*100):0;
   const tmplPct=total?Math.round(sbEntries.filter(e=>e.template==='Yes').length/total*100):0;
-  const full9=sbEntries.filter(e=>e.domains_documented===9).length;
+  const full9=sbEntries.filter(e=>e.domains_documented===6).length;
   const full9Pct=total?Math.round(full9/total*100):0;
-  const avg=total?(sbEntries.reduce((a,e)=>a+(Number(e.domains_documented)||0),0)/total).toFixed(1):'—';
-
-  // progress ring
-  const r=64; const circ=2*Math.PI*r;
-  const offset=circ-(completionPct/100)*circ;
+  const avg=total?(sbEntries.reduce((a,e)=>a+(Number(e.domains_documented)||0),0)/total).toFixed(1):'...';
+  const r=64;const circ=2*Math.PI*r;const offset=circ-(completionPct/100)*circ;
   const ringColour=completionPct===100?'green':'';
-
-  // per-domain percentages
   const domainRows=DOMAINS.map(d=>{
     const cnt=sbEntries.filter(e=>e[d.key]==='Yes').length;
     const pct=total?Math.round(cnt/total*100):0;
     const colour=pct>=80?'#15803d':pct>=50?'#1d4ed8':'#b45309';
     return`<div class="domain-table-row">
-      <span class="domain-table-label">${d.label}</span>
+      <span class="domain-table-label">${d.label}${d.scored?'':' <span style="font-size:10px;color:var(--muted)">(extra)</span>'}</span>
       <div class="domain-table-bar"><div class="domain-table-fill" style="width:${pct}%;background:${colour}"></div></div>
       <span class="domain-table-pct" style="color:${colour}">${pct}%</span>
     </div>`;
   }).join('');
-
   document.getElementById('overview-wrap').innerHTML=`
     <div class="progress-ring-wrap">
       <div class="ring-container">
         <svg width="160" height="160" viewBox="0 0 160 160">
           <circle class="ring-bg" cx="80" cy="80" r="${r}"/>
-          <circle class="ring-fill ${ringColour}" cx="80" cy="80" r="${r}"
-            stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
+          <circle class="ring-fill ${ringColour}" cx="80" cy="80" r="${r}" stroke-dasharray="${circ}" stroke-dashoffset="${offset}"/>
         </svg>
         <div class="ring-label">
           <div class="ring-pct ${ringColour}">${completionPct}%</div>
@@ -823,46 +920,84 @@ function renderAdmin(){
       <div class="ov-card amber"><div class="ov-num">${totalSk}</div><div class="ov-label">Skipped</div></div>
       <div class="ov-card green"><div class="ov-num">${tmplPct}%</div><div class="ov-label">7PPP template used</div></div>
       <div class="ov-card"><div class="ov-num">${avg}</div><div class="ov-label">Avg domains / note</div></div>
-      <div class="ov-card green" style="grid-column:span 2"><div class="ov-num">${full9Pct}%</div><div class="ov-label">All 9 domains documented (${full9} notes)</div></div>
+      <div class="ov-card green" style="grid-column:span 2"><div class="ov-num">${full9Pct}%</div><div class="ov-label">All 6 domains documented (${full9} notes)</div></div>
     </div>
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Domain completion</div>
     <div class="domain-table">${domainRows}</div>`;
 }
 
-// ─── COLLECTOR TAB ──────────────────────────
-function collectorDisplayName(id){
-  const m=id.match(/collector(\d+)/i);
-  return m?'Collector '+m[1]:id;
-}
+// COLLECTORS TAB
+function collectorDisplayName(id){const m=id.match(/collector(\d+)/i);return m?'Collector '+m[1]:id}
 function collectorStatusDot(c){
   const cnt=sbEntries.filter(e=>e.collector===c.id).length;
   const sk=sbSkipped.filter(s=>s.collector===c.id).length;
   const total=(c.to-c.from+1);
-  if(cnt===0&&sk===0) return {cls:'dot-none',label:'Not started'};
-  if(cnt+sk>=total) return {cls:'dot-complete',label:'Complete'};
-  return {cls:'dot-progress',label:'In progress'};
+  if(cnt===0&&sk===0)return{cls:'dot-none',label:'Not started'};
+  if(cnt+sk>=total)return{cls:'dot-complete',label:'Complete'};
+  return{cls:'dot-progress',label:'In progress'};
 }
+
 function renderCollectorList(){
   const cols=getCollectors();
-  document.getElementById('collector-list-view').innerHTML=cols.map((c,i)=>{
+  const groups={complete:[],progress:[],none:[]};
+  cols.forEach((c,i)=>{
+    const dot=collectorStatusDot(c);
+    if(dot.cls==='dot-complete')groups.complete.push({c,i});
+    else if(dot.cls==='dot-progress')groups.progress.push({c,i});
+    else groups.none.push({c,i});
+  });
+  function makeBtn(c,i){
     const cnt=sbEntries.filter(e=>e.collector===c.id).length;
     const sk=sbSkipped.filter(s=>s.collector===c.id).length;
     const total=(c.to-c.from+1);
     const dot=collectorStatusDot(c);
-    const displayName=collectorDisplayName(c.id);
     return`<button class="col-select-btn" onclick="openCollectorDetail(${i})">
       <div style="display:flex;align-items:center;gap:10px;width:100%">
-        <div class="col-status-dot ${dot.cls}" title="${dot.label}"></div>
+        <div class="col-status-dot ${dot.cls}"></div>
         <div style="flex:1">
-          <div class="col-select-name">${displayName}</div>
-          <div class="col-select-meta">Entries ${c.from}–${c.to} · ${cnt} done · ${sk} skipped · ${Math.max(0,total-cnt-sk)} remaining</div>
+          <div class="col-select-name">${collectorDisplayName(c.id)}</div>
+          <div class="col-select-meta">Entries ${c.from} to ${c.to} - ${cnt} done - ${sk} skipped - ${Math.max(0,total-cnt-sk)} remaining</div>
         </div>
         <span class="col-select-arrow">›</span>
       </div>
     </button>`;
-  }).join('');
+  }
+  const hasActive=groups.complete.length+groups.progress.length>0;
+  let html='';
+  if(groups.complete.length){
+    html+=`<div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin:4px 0 6px">Complete (${groups.complete.length})</div>`;
+    html+=groups.complete.map(({c,i})=>makeBtn(c,i)).join('');
+  }
+  if(groups.progress.length){
+    html+=`<div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.08em;margin:12px 0 6px">In progress (${groups.progress.length})</div>`;
+    html+=groups.progress.map(({c,i})=>makeBtn(c,i)).join('');
+  }
+  if(groups.none.length){
+    if(hasActive){
+      html+=`<div style="margin-top:12px">
+        <button class="btn-ghost" style="font-size:12px;width:100%;text-align:left" onclick="toggleNotStarted()">
+          Not started (${groups.none.length}) <span id="not-started-chevron">▼</span>
+        </button>
+        <div id="not-started-list" style="display:none;margin-top:8px;flex-direction:column;gap:8px">
+          ${groups.none.map(({c,i})=>makeBtn(c,i)).join('')}
+        </div>
+      </div>`;
+    }else{
+      html+=`<div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:4px 0 6px">Not started (${groups.none.length})</div>`;
+      html+=groups.none.map(({c,i})=>makeBtn(c,i)).join('');
+    }
+  }
+  document.getElementById('collector-list-view').innerHTML=html;
   document.getElementById('collector-list-view').style.display='flex';
   document.getElementById('collector-detail-view').style.display='none';
+}
+
+function toggleNotStarted(){
+  notStartedOpen=!notStartedOpen;
+  const el=document.getElementById('not-started-list');
+  if(el)el.style.display=notStartedOpen?'flex':'none';
+  const ch=document.getElementById('not-started-chevron');
+  if(ch)ch.textContent=notStartedOpen?'▲':'▼';
 }
 
 function openCollectorDetail(idx){
@@ -871,10 +1006,10 @@ function openCollectorDetail(idx){
   const mySkipped=sbSkipped.filter(s=>s.collector===c.id);
   const total=(c.to-c.from+1);
   const done=myEntries.length;const sk=mySkipped.length;
-  const avg=done?(myEntries.reduce((a,e)=>a+e.domains_documented,0)/done).toFixed(1):'—';
-  const tmplPct=done?Math.round(myEntries.filter(e=>e.template==='Yes').length/done*100)+'%':'—';
-
-  let domainBars=DOMAINS.map(d=>{
+  const avg=done?(myEntries.reduce((a,e)=>a+(Number(e.domains_documented)||0),0)/done).toFixed(1):'...';
+  const tmplPct=done?Math.round(myEntries.filter(e=>e.template==='Yes').length/done*100)+'%':'...';
+  const displayName=collectorDisplayName(c.id);
+  const domainBars=DOMAINS.map(d=>{
     const cnt=myEntries.filter(e=>e[d.key]==='Yes').length;
     const pct=done?Math.round(cnt/done*100):0;
     return`<div class="domain-bar-row">
@@ -883,107 +1018,88 @@ function openCollectorDetail(idx){
       <div class="domain-bar-pct">${pct}%</div>
     </div>`;
   }).join('');
-
-  let recentRows=myEntries.slice(-5).reverse().map(e=>{
-    const score=DOMAINS.filter(d=>e[d.key]==='Yes').length;
-    return`<div class="recent-row"><div><div class="rr-id">Entry #${e.entry}</div><div class="rr-meta">${fmtDate(e.timestamp)}</div></div><span class="rr-badge ${score===9?'':'partial'}">${score}/9</span></div>`;
+  const myScore=done?(myEntries.reduce((a,e)=>a+(Number(e.domains_documented)||0),0)/done).toFixed(1):'...';
+  const recentRows=myEntries.slice(-5).reverse().map(e=>{
+    const score=SCORED_DOMAINS.filter(d=>e[d.key]==='Yes').length;
+    return`<div class="recent-row" onclick="showEntryDetail(${JSON.stringify(e).replace(/"/g,'&quot;')})"><div><div class="rr-id">Entry #${e.entry}</div><div class="rr-meta">${fmtDate(e.timestamp)}</div></div><span class="rr-badge ${score===6?'':'partial'}">${score}/6</span></div>`;
   }).join('')||'<div class="empty-state">No entries yet</div>';
-
-  let skippedRows=mySkipped.map(s=>`
-    <div class="skip-row" style="margin-bottom:8px">
-      <div class="skip-row-left">
-        <div class="skip-entry">Entry #${s.entry}</div>
-        <div class="skip-reason">${s.skip_reason}</div>
-      </div>
-    </div>`).join('')||'<div class="empty-state">None</div>';
-
-  const displayName=collectorDisplayName(c.id);
+  const skippedRows=mySkipped.map(s=>`<div class="skip-row" style="margin-bottom:8px"><div class="skip-entry">Entry #${s.entry}</div><div class="skip-reason">${s.skip_reason||''}</div></div>`).join('')||'<div class="empty-state">None</div>';
   document.getElementById('collector-detail-content').innerHTML=`
     <h2 style="font-size:18px;font-weight:800;margin-bottom:4px">${displayName}</h2>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Entries ${c.from}–${c.to}</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Entries ${c.from} to ${c.to}</p>
     <div class="detail-stat-grid">
       <div class="detail-stat green"><div class="n">${done}</div><div class="l">Done</div></div>
       <div class="detail-stat amber"><div class="n">${sk}</div><div class="l">Skipped</div></div>
       <div class="detail-stat"><div class="n">${Math.max(0,total-done-sk)}</div><div class="l">Remaining</div></div>
       <div class="detail-stat"><div class="n">${avg}</div><div class="l">Avg domains</div></div>
-      <div class="detail-stat" style="grid-column:span 2"><div class="n">${tmplPct}</div><div class="l">7PPP template used</div></div>
+      <div class="detail-stat" style="grid-column:span 2"><div class="n">${tmplPct}</div><div class="l">7PPP used</div></div>
     </div>
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Domain completion</div>
     ${domainBars}
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:16px 0 10px">Recent entries</div>
     <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">${recentRows}</div>
-    ${mySkipped.length?`<div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Skipped entries</div>${skippedRows}`:''}
-  `;
+    ${mySkipped.length?`<div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Skipped</div>${skippedRows}`:''}`;
   document.getElementById('collector-list-view').style.display='none';
   document.getElementById('collector-detail-view').style.display='block';
 }
-
 function closeCollectorDetail(){
   document.getElementById('collector-list-view').style.display='flex';
   document.getElementById('collector-detail-view').style.display='none';
 }
 
-// ─── ENTRIES TAB ───────────────────────────
+// ENTRIES TAB
 function renderAdminEntries(){
   const cols=getCollectors();
-  const chips=[{label:'All',val:'all'},...cols.map(c=>({label:c.id,val:c.id}))];
-  document.getElementById('filter-chips').innerHTML=chips.map(ch=>`
-    <button class="filter-chip ${activeFilter===ch.val?'active':''}" onclick="setFilter('${ch.val}')">${ch.label}</button>`).join('');
-
+  const chips=[{label:'All',val:'all'},...cols.map(c=>({label:collectorDisplayName(c.id),val:c.id}))];
+  document.getElementById('filter-chips').innerHTML=chips.map(ch=>`<button class="filter-chip ${activeFilter===ch.val?'active':''}" onclick="setFilter('${ch.val}')">${ch.label}</button>`).join('');
   const filtered=activeFilter==='all'?sbEntries:sbEntries.filter(e=>e.collector===activeFilter);
   const filteredSk=activeFilter==='all'?sbSkipped:sbSkipped.filter(s=>s.collector===activeFilter);
-
-  document.getElementById('entries-count').textContent=`${filtered.length} submitted · ${filteredSk.length} skipped`;
+  document.getElementById('entries-count').textContent=`${filtered.length} submitted - ${filteredSk.length} skipped`;
   document.getElementById('skipped-badge').textContent=`(${filteredSk.length})`;
-
   document.getElementById('skipped-list').innerHTML=filteredSk.length
-    ?[...filteredSk].reverse().map(s=>`
-      <div class="skip-row" style="margin-bottom:8px">
-        <div class="skip-row-left">
-          <div class="skip-entry">Entry #${s.entry}</div>
-          <div class="skip-collector">${s.collector} · ${fmtDate(s.timestamp)}</div>
-          <div class="skip-reason">${s.skip_reason||'—'}</div>
-        </div>
+    ?[...filteredSk].reverse().map(s=>`<div class="skip-row" style="margin-bottom:8px;cursor:pointer" onclick="showEntryDetail(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+        <div class="skip-entry">Entry #${s.entry}</div>
+        <div class="skip-collector">${s.collector} - ${fmtDate(s.timestamp)}</div>
+        <div class="skip-reason">${s.skip_reason||''}</div>
       </div>`).join('')
     :'<div class="empty-state" style="padding:16px">No skipped entries</div>';
-
   const sorted=[...filtered].sort((a,b)=>b.entry-a.entry);
+  window._sortedFiltered=sorted;
   document.getElementById('admin-entries').innerHTML=sorted.length
-    ?sorted.map((e,i)=>`
-      <div class="entry-row">
+    ?sorted.map((e,i)=>`<div class="entry-row" onclick="showEntryDetail(${JSON.stringify(e).replace(/"/g,'&quot;')})">
         <div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500">Entry #${e.entry}</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">${e.collector} · ${fmtDate(e.timestamp)}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">${collectorDisplayName(e.collector)} - ${fmtDate(e.timestamp)}</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:13px;font-weight:700;color:var(--primary)">${e.domains_documented}/9</span>
-          <button class="entry-row-del" onclick="promptDelete(${i})">✕</button>
+          <span style="font-size:13px;font-weight:700;color:var(--primary)">${e.domains_documented}/6</span>
+          <button class="entry-row-del" onclick="event.stopPropagation();promptDelete(${i})">x</button>
         </div>
       </div>`).join('')
     :'<div class="empty-state" style="padding:24px">No entries</div>';
-  // store sorted ref for delete lookup
-  window._sortedFiltered=sorted;
 }
-
 function setFilter(val){activeFilter=val;renderAdminEntries()}
-
 function toggleSkippedSection(){
   skippedSectionOpen=!skippedSectionOpen;
   document.getElementById('skipped-section').style.display=skippedSectionOpen?'flex':'none';
   document.getElementById('skip-chevron').textContent=skippedSectionOpen?'▲':'▼';
 }
+function promptDelete(idx){pendingDeleteRow=window._sortedFiltered?window._sortedFiltered[idx]:null;openModal('delete')}
 
-function promptDelete(idx){
-  pendingDeleteRow=window._sortedFiltered?window._sortedFiltered[idx]:null;
-  openModal('delete');
+// SETTINGS
+let collectorCfgOpen=false;
+function toggleCollectorSettings(){
+  collectorCfgOpen=!collectorCfgOpen;
+  document.getElementById('collector-cfg-list').style.display=collectorCfgOpen?'block':'none';
+  document.getElementById('collector-cfg-save').style.display=collectorCfgOpen?'block':'none';
+  document.getElementById('col-settings-chevron').textContent=collectorCfgOpen?'Hide':'Show';
+  if(collectorCfgOpen)renderCollectorCfg();
 }
-
-// ─── SETTINGS ──────────────────────────────
-function renderSettings(){
+function renderCollectorCfg(){
   const cols=getCollectors();
   document.getElementById('collector-cfg-list').innerHTML=cols.map((c,i)=>`
     <div class="collector-cfg">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Collector ${i+1}</div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">${collectorDisplayName(c.id)}</div>
       <div class="cfg-fields">
         <div class="cfg-field"><label>ID</label><input class="cfg-input" type="text" id="cfg-id-${i}" value="${c.id}"></div>
         <div class="cfg-field"><label>Password</label><input class="cfg-input mono" type="text" id="cfg-pw-${i}" value="${c.pw}"></div>
@@ -992,27 +1108,44 @@ function renderSettings(){
       </div>
     </div>`).join('');
 }
-function saveCollectorSettings(){
+function renderSettings(){
+  document.getElementById('total-patients-input').value=getTotalPatients();
+  const admin=getAdmin();
+  document.getElementById('admin-id-display').value=admin.id;
+}
+async function saveCollectorSettings(){
   const cols=getCollectors();
-  const updated=cols.map((_,i)=>({
+  const updated=cols.map((c,i)=>({
     id:document.getElementById('cfg-id-'+i).value.trim()||`collector${i+1}`,
-    pw:document.getElementById('cfg-pw-'+i).value.trim()||'7ppp2026',
+    pw:document.getElementById('cfg-pw-'+i).value.trim()||c.pw,
     from:parseInt(document.getElementById('cfg-from-'+i).value)||1,
     to:parseInt(document.getElementById('cfg-to-'+i).value)||50,
   }));
-  save('ptwr_collectors',updated);alert('✓ Collector settings saved!');
+  save('ptwr_collectors',updated);
+  await pushConfig('collectors',JSON.stringify(updated));
+  alert('Collector settings saved. All devices will update on next login.');
 }
-function saveAdminCreds(){
-  const id=document.getElementById('new-admin-id').value.trim();
+async function saveAdminCreds(){
   const pw=document.getElementById('new-admin-pw').value.trim();
-  if(!id||!pw){alert('Please fill in both fields.');return}
-  save('ptwr_admin',{id,pw});
-  document.getElementById('new-admin-id').value='';document.getElementById('new-admin-pw').value='';
-  alert('✓ Admin credentials updated!');
+  if(!pw){alert('Please enter a new password.');return}
+  const admin=getAdmin();
+  admin.pw=pw;
+  save('ptwr_admin',admin);
+  await pushConfig('admin',JSON.stringify(admin));
+  document.getElementById('new-admin-pw').value='';
+  alert('Admin password updated.');
 }
+async function saveTotalPatients(){
+  const n=parseInt(document.getElementById('total-patients-input').value);
+  if(!n||n<1){alert('Please enter a valid number.');return}
+  localStorage.setItem('ptwr_total_patients',n);
+  await pushTotalPatients(n);
+  renderAdmin();
+  alert(`Total patients updated to ${n}.`);
+}
+async function pushTotalPatients(n){await pushConfig('total_patients',n)}
 
-
-// ─── EXPORT ────────────────────────────────
+// EXPORT
 function showExport(){
   prevScreen='screen-admin';
   const headers=['collector','entry','timestamp','template',...DOMAINS.map(d=>d.key),'domains_documented','status','skip_reason'];
@@ -1020,24 +1153,24 @@ function showExport(){
   const rows=[headers.join(',')];
   allData.forEach(e=>rows.push(headers.map(h=>`"${e[h]??''}"`).join(',')));
   document.getElementById('csv-preview').value=rows.join('\n');
-  document.getElementById('export-count-label').textContent=`${sbEntries.length} submitted · ${sbSkipped.length} skipped`;
+  document.getElementById('export-count-label').textContent=`${sbEntries.length} submitted - ${sbSkipped.length} skipped`;
   show('screen-export');
 }
 function showPrev(){show(prevScreen)}
 function downloadCSV(){
-  if(!entries.length&&!skipped.length){alert('No data to export.');return}
+  if(!sbEntries.length&&!sbSkipped.length&&!entries.length){alert('No data to export.');return}
   const blob=new Blob([document.getElementById('csv-preview').value],{type:'text/csv'});
   const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:`PTWR_audit_${today()}.csv`});
   a.click();
 }
 function copyCSV(){navigator.clipboard.writeText(document.getElementById('csv-preview').value).then(()=>alert('Copied!')).catch(()=>alert('Copy failed.'))}
 
-// ─── UTILS ─────────────────────────────────
+// UTILS
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
 function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
 function load(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
 function today(){return new Date().toISOString().slice(0,10)}
-function fmtDate(iso){return new Date(iso).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' · '+new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}
+function fmtDate(iso){return new Date(iso).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' - '+new Date(iso).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}
 </script>
 </body>
 </html>
