@@ -412,9 +412,12 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
   </div>
 
   <div class="tab-panel" id="tab-entries">
-    <div style="padding:12px 18px 8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-      <span style="font-size:12px;font-weight:700;color:var(--muted);margin-right:4px">Filter:</span>
-      <div id="filter-chips" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    <div style="padding:12px 18px 8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleFilters()">
+        <span style="font-size:12px;font-weight:700;color:var(--muted)">Filter by collector</span>
+        <span id="filter-chevron" style="font-size:12px;color:var(--muted)">▼</span>
+      </div>
+      <div id="filter-chips" style="display:none;flex-wrap:wrap;gap:6px;margin-top:10px"></div>
     </div>
     <div style="padding:0 18px 10px;display:flex;justify-content:space-between;align-items:center">
       <span id="entries-count" style="font-size:13px;color:var(--muted)"></span>
@@ -840,7 +843,7 @@ function showEntryDetail(entry){
         <div style="font-size:13px;color:var(--amber);margin-top:6px;line-height:1.4">${entry.skip_reason||''}</div>
       </div>`:`
       <div class="detail-hero">
-        <div class="detail-score">${score}/9</div>
+        <div class="detail-score">${score}/6</div>
         <div class="detail-sublabel">core domains documented (out of 6)</div>
         <div class="detail-tmpl ${entry.template==='Yes'?'yes':'no'}">${entry.template==='Yes'?'7PPP Template Used':'7PPP Template Not Used'}</div>
       </div>`}
@@ -1079,6 +1082,12 @@ function renderAdminEntries(){
     :'<div class="empty-state" style="padding:24px">No entries</div>';
 }
 function setFilter(val){activeFilter=val;renderAdminEntries()}
+let filtersOpen=false;
+function toggleFilters(){
+  filtersOpen=!filtersOpen;
+  document.getElementById('filter-chips').style.display=filtersOpen?'flex':'none';
+  document.getElementById('filter-chevron').textContent=filtersOpen?'▲':'▼';
+}
 function toggleSkippedSection(){
   skippedSectionOpen=!skippedSectionOpen;
   document.getElementById('skipped-section').style.display=skippedSectionOpen?'flex':'none';
