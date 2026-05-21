@@ -771,7 +771,7 @@ async function submitEntry(){
   entries.push(entry);save('ptwr_entries',entries);
   await sbInsert(entry);
   gsInsert(entry);
-  alert(`Entry #${currentEntry} saved - ${entry.domains_documented}/9 domains`);
+  alert(`Entry #${currentEntry} saved - ${entry.domains_documented}/6 domains`);
   showHome();
 }
 
@@ -895,6 +895,11 @@ function renderAdmin(){
   const avg=total?(sbEntries.reduce((a,e)=>a+(Number(e.domains_documented)||0),0)/total).toFixed(1):'...';
   const r=64;const circ=2*Math.PI*r;const offset=circ-(completionPct/100)*circ;
   const ringColour=completionPct===100?'green':'';
+  // overall compliance = total Yes ticks across all scored domains / (total notes * 6)
+  const totalPossible=total*SCORED_DOMAINS.length;
+  const totalTicked=SCORED_DOMAINS.reduce((a,d)=>a+sbEntries.filter(e=>e[d.key]==='Yes').length,0);
+  const overallCompliancePct=totalPossible?Math.round(totalTicked/totalPossible*100):0;
+
   const domainRows=DOMAINS.map(d=>{
     const cnt=sbEntries.filter(e=>e[d.key]==='Yes').length;
     const pct=total?Math.round(cnt/total*100):0;
@@ -922,8 +927,12 @@ function renderAdmin(){
       <div class="ov-card"><div class="ov-num">${total}</div><div class="ov-label">Audited</div></div>
       <div class="ov-card amber"><div class="ov-num">${totalSk}</div><div class="ov-label">Skipped</div></div>
       <div class="ov-card green"><div class="ov-num">${tmplPct}%</div><div class="ov-label">7PPP template used</div></div>
-      <div class="ov-card"><div class="ov-num">${avg}</div><div class="ov-label">Avg domains / note</div></div>
+      <div class="ov-card"><div class="ov-num">${avg}/6</div><div class="ov-label">Avg domains / note</div></div>
       <div class="ov-card green" style="grid-column:span 2"><div class="ov-num">${full9Pct}%</div><div class="ov-label">All 6 domains documented (${full9} notes)</div></div>
+      <div class="ov-card" style="grid-column:span 2;border-color:var(--primary-border);background:var(--primary-light)">
+        <div class="ov-num" style="color:var(--primary)">${overallCompliancePct}%</div>
+        <div class="ov-label">Overall domain compliance (domains ticked across all notes)</div>
+      </div>
     </div>
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Domain completion</div>
     <div class="domain-table">${domainRows}</div>`;
@@ -1012,6 +1021,9 @@ function openCollectorDetail(idx){
   const avg=done?(myEntries.reduce((a,e)=>a+(Number(e.domains_documented)||0),0)/done).toFixed(1):'...';
   const tmplPct=done?Math.round(myEntries.filter(e=>e.template==='Yes').length/done*100)+'%':'...';
   const displayName=collectorDisplayName(c.id);
+  const colTotalPossible=done*SCORED_DOMAINS.length;
+  const colTotalTicked=SCORED_DOMAINS.reduce((a,d)=>a+myEntries.filter(e=>e[d.key]==='Yes').length,0);
+  const colCompliancePct=colTotalPossible?Math.round(colTotalTicked/colTotalPossible*100):0;
   const domainBars=DOMAINS.map(d=>{
     const cnt=myEntries.filter(e=>e[d.key]==='Yes').length;
     const pct=done?Math.round(cnt/done*100):0;
@@ -1034,8 +1046,9 @@ function openCollectorDetail(idx){
       <div class="detail-stat green"><div class="n">${done}</div><div class="l">Done</div></div>
       <div class="detail-stat amber"><div class="n">${sk}</div><div class="l">Skipped</div></div>
       <div class="detail-stat"><div class="n">${Math.max(0,total-done-sk)}</div><div class="l">Remaining</div></div>
-      <div class="detail-stat"><div class="n">${avg}</div><div class="l">Avg domains</div></div>
-      <div class="detail-stat" style="grid-column:span 2"><div class="n">${tmplPct}</div><div class="l">7PPP used</div></div>
+      <div class="detail-stat"><div class="n">${avg}/6</div><div class="l">Avg domains</div></div>
+      <div class="detail-stat"><div class="n">${tmplPct}</div><div class="l">7PPP used</div></div>
+      <div class="detail-stat" style="grid-column:span 3;border-color:var(--primary-border);background:var(--primary-light)"><div class="n" style="color:var(--primary)">${colCompliancePct}%</div><div class="l">Overall domain compliance</div></div>
     </div>
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Domain completion</div>
     ${domainBars}
