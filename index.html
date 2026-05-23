@@ -296,9 +296,13 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
     </div>
   </div>
   <div class="home-actions">
-    <button class="action-tile" onclick="startNextEntry()">
+    <button class="action-tile" id="start-entry-btn" onclick="startNextEntry()">
       <span class="tile-icon">📋</span>
       <div class="tile-text"><h3>Start Next Entry</h3><p id="next-entry-label">Loading...</p></div>
+    </button>
+    <button class="action-tile secondary" onclick="openMasterSheet()">
+      <span class="tile-icon">📄</span>
+      <div class="tile-text"><h3>Patient List</h3><p>Open master spreadsheet to look up MRN</p></div>
     </button>
   </div>
   <div class="section-head" style="margin-top:4px">Recent entries</div>
@@ -413,26 +417,56 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
   </div>
 
   <div class="tab-panel" id="tab-entries">
-    <div style="padding:12px 18px 8px">
-      <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleFilters()">
-        <span style="font-size:12px;font-weight:700;color:var(--muted)">Filter by collector</span>
-        <span id="filter-chevron" style="font-size:12px;color:var(--muted)">▼</span>
+    <div style="padding:12px 18px;display:flex;flex-direction:column;gap:8px">
+
+      <!-- Find Entry -->
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden">
+        <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleJumpTo()">
+          <span style="font-size:13px;font-weight:700;color:var(--muted)">Find Entry</span>
+          <span id="jump-chevron" style="font-size:12px;color:var(--muted)">▼</span>
+        </div>
+        <div id="jump-section" style="display:none;padding:0 16px 16px;border-top:1px solid var(--border)">
+          <p style="font-size:13px;color:var(--muted);margin:12px 0 10px;line-height:1.5">Jump to an entry to see its status and data.</p>
+          <div style="display:flex;gap:8px">
+            <input type="number" id="jump-input" placeholder="Entry number" class="setting-input" style="flex:1;font-size:15px;padding:10px 12px" inputmode="numeric">
+            <button class="btn-primary amber" style="width:auto;padding:10px 18px;font-size:14px" onclick="jumpToEntry()">Jump</button>
+          </div>
+          <div id="jump-result" style="margin-top:12px"></div>
+        </div>
       </div>
-      <div id="filter-chips" style="display:none;flex-wrap:wrap;gap:6px;margin-top:10px"></div>
-    </div>
-    <div style="padding:0 18px 10px">
-      <span id="entries-count" style="font-size:13px;color:var(--muted)"></span>
-    </div>
-    <div style="padding:0 18px 8px">
-      <div class="skip-toggle" onclick="toggleSkippedSection()" id="skip-toggle-header">
-        <span style="font-size:13px;font-weight:700;color:var(--amber)">Skipped entries <span id="skipped-badge" style="font-family:'JetBrains Mono',monospace"></span></span>
-        <span id="skip-chevron">▼</span>
+
+      <!-- Filter by collector -->
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden">
+        <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleFilters()">
+          <span style="font-size:13px;font-weight:700;color:var(--muted)">Filter by collector</span>
+          <span id="filter-chevron" style="font-size:12px;color:var(--muted)">▼</span>
+        </div>
+        <div id="filter-chips" style="display:none;flex-wrap:wrap;gap:6px;padding:0 16px 14px;border-top:1px solid var(--border)"></div>
       </div>
-      <div id="skipped-section" style="display:none;flex-direction:column;gap:8px">
-        <div id="skipped-list"></div>
+
+      <!-- Submitted entries -->
+      <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden">
+        <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleSubmittedSection()">
+          <span style="font-size:13px;font-weight:700;color:var(--muted)">Submitted entries <span id="entries-count" style="font-family:'JetBrains Mono',monospace;font-weight:400"></span></span>
+          <span id="submitted-chevron" style="font-size:12px;color:var(--muted)">▼</span>
+        </div>
+        <div id="submitted-section" style="display:none;flex-direction:column;gap:8px;padding:8px 16px 16px;border-top:1px solid var(--border)">
+          <div id="admin-entries"></div>
+        </div>
       </div>
+
+      <!-- Skipped entries -->
+      <div style="background:var(--amber-light);border:1.5px solid #fcd34d;border-radius:var(--r);overflow:hidden">
+        <div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer" onclick="toggleSkippedSection()">
+          <span style="font-size:13px;font-weight:700;color:var(--amber)">Skipped entries <span id="skipped-badge" style="font-family:'JetBrains Mono',monospace;font-weight:400"></span></span>
+          <span id="skip-chevron" style="font-size:12px;color:var(--amber)">▼</span>
+        </div>
+        <div id="skipped-section" style="display:none;flex-direction:column;gap:8px;padding:8px 16px 16px;border-top:1px solid #fcd34d">
+          <div id="skipped-list"></div>
+        </div>
+      </div>
+
     </div>
-    <div style="padding:0 18px;display:flex;flex-direction:column;gap:8px;padding-bottom:40px" id="admin-entries"></div>
   </div>
 
   <div class="tab-panel" id="tab-settings">
@@ -481,6 +515,7 @@ body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);displa
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
         <button class="ext-link-btn" style="background:#15803d" onclick="window.open('https://docs.google.com/spreadsheets/d/1tpCU3kHWpAcLbyK9aiTs1PjMYyEHYlwzGL-nOc5y9z8/edit','_blank')">Open Google Sheet</button>
         <button class="ext-link-btn" style="background:#1d4ed8" onclick="window.open('https://supabase.com/dashboard/project/tiwpcwecvtiaabczalkn/editor/17547?schema=public','_blank')">Open Supabase (entries)</button>
+        <button class="ext-link-btn" style="background:#217346;margin-top:8px" onclick="openMasterSheet()">Open Master Spreadsheet (MRN list)</button>
       </div>
     </div>
   </div>
@@ -612,6 +647,14 @@ let modalMode='';
 let pendingDeleteRow=null;
 let collectorSettingsOpen=false;
 let notStartedOpen=false;
+let unassignedOpen=false;
+function toggleUnassigned(){
+  unassignedOpen=!unassignedOpen;
+  const el=document.getElementById('unassigned-list');
+  if(el)el.style.display=unassignedOpen?'flex':'none';
+  const ch=document.getElementById('unassigned-chevron');
+  if(ch)ch.textContent=unassignedOpen?'▲':'▼';
+}
 
 // INIT
 function buildChecklist(){
@@ -639,6 +682,13 @@ async function doLogin(){
 document.getElementById('login-pw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
 document.getElementById('login-id').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login-pw').focus()});
 
+const MASTER_SHEET_URL = ''; // paste your Excel Online link here
+
+function openMasterSheet(){
+  if(!MASTER_SHEET_URL){alert('Master spreadsheet link not yet configured. Contact your administrator.');return}
+  window.open(MASTER_SHEET_URL,'_blank');
+}
+
 function doLogout(){
   currentUser=null;
   document.getElementById('login-id').value='';
@@ -648,11 +698,31 @@ function doLogout(){
 }
 
 // HOME
+function isUnassigned(from,to){return !from||!to||from===0||to===0||from>to}
+
 async function showHome(){
   const{from,to,id}=currentUser;
   document.getElementById('home-date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
   document.getElementById('home-collector').textContent=id;
+  const unassigned=isUnassigned(from,to);
+  if(unassigned){
+    document.getElementById('home-range').textContent='No range assigned yet';
+    document.getElementById('stat-done').textContent='...';
+    document.getElementById('stat-skipped').textContent='...';
+    document.getElementById('stat-remaining').textContent='...';
+    document.getElementById('next-entry-label').textContent='Contact your administrator to be assigned a range';
+    document.getElementById('start-entry-btn').disabled=true;
+    document.getElementById('start-entry-btn').style.opacity='0.4';
+    document.getElementById('start-entry-btn').style.cursor='default';
+    renderRecent();
+    prevScreen='screen-home';
+    show('screen-home');
+    return;
+  }
   document.getElementById('home-range').textContent=`Assigned entries: ${from} to ${to}`;
+  document.getElementById('start-entry-btn').disabled=false;
+  document.getElementById('start-entry-btn').style.opacity='1';
+  document.getElementById('start-entry-btn').style.cursor='pointer';
   const remote=await sbFetchMine(id);
   if(remote){
     const rs=remote.filter(r=>r.status==='Submitted');
@@ -948,6 +1018,7 @@ function renderAdmin(){
 // COLLECTORS TAB
 function collectorDisplayName(id){const m=id.match(/collector(\d+)/i);return m?'Collector '+m[1]:id}
 function collectorStatusDot(c){
+  if(isUnassigned(c.from,c.to))return{cls:'dot-none',label:'Unassigned'};
   const cnt=sbEntries.filter(e=>e.collector===c.id).length;
   const sk=sbSkipped.filter(s=>s.collector===c.id).length;
   const total=(c.to-c.from+1);
@@ -968,20 +1039,25 @@ function renderCollectorList(){
   function makeBtn(c,i){
     const cnt=sbEntries.filter(e=>e.collector===c.id).length;
     const sk=sbSkipped.filter(s=>s.collector===c.id).length;
-    const total=(c.to-c.from+1);
+    const total=isUnassigned(c.from,c.to)?0:(c.to-c.from+1);
     const dot=collectorStatusDot(c);
+    const meta=isUnassigned(c.from,c.to)?'No range assigned':`Entries ${c.from} to ${c.to} - ${cnt} done - ${sk} skipped - ${Math.max(0,total-cnt-sk)} remaining`;
     return`<button class="col-select-btn" onclick="openCollectorDetail(${i})">
       <div style="display:flex;align-items:center;gap:10px;width:100%">
         <div class="col-status-dot ${dot.cls}"></div>
         <div style="flex:1">
           <div class="col-select-name">${collectorDisplayName(c.id)}</div>
-          <div class="col-select-meta">Entries ${c.from} to ${c.to} - ${cnt} done - ${sk} skipped - ${Math.max(0,total-cnt-sk)} remaining</div>
+          <div class="col-select-meta">${meta}</div>
         </div>
         <span class="col-select-arrow">›</span>
       </div>
     </button>`;
   }
-  const hasActive=groups.complete.length+groups.progress.length>0;
+  // separate unassigned from not-started
+  const unassignedGroup=groups.none.filter(({c})=>isUnassigned(c.from,c.to));
+  const notStartedGroup=groups.none.filter(({c})=>!isUnassigned(c.from,c.to));
+
+  const hasActive=groups.complete.length+groups.progress.length+notStartedGroup.length>0;
   let html='';
   if(groups.complete.length){
     html+=`<div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin:4px 0 6px">Complete (${groups.complete.length})</div>`;
@@ -991,20 +1067,39 @@ function renderCollectorList(){
     html+=`<div style="font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.08em;margin:12px 0 6px">In progress (${groups.progress.length})</div>`;
     html+=groups.progress.map(({c,i})=>makeBtn(c,i)).join('');
   }
-  if(groups.none.length){
-    if(hasActive){
+  if(notStartedGroup.length){
+    if(hasActive&&notStartedGroup.length>3){
       html+=`<div style="margin-top:12px">
         <button class="btn-ghost" style="font-size:12px;width:100%;text-align:left" onclick="toggleNotStarted()">
-          Not started (${groups.none.length}) <span id="not-started-chevron">▼</span>
+          Not started (${notStartedGroup.length}) <span id="not-started-chevron">▼</span>
         </button>
         <div id="not-started-list" style="display:none;margin-top:8px;flex-direction:column;gap:8px">
-          ${groups.none.map(({c,i})=>makeBtn(c,i)).join('')}
+          ${notStartedGroup.map(({c,i})=>makeBtn(c,i)).join('')}
         </div>
       </div>`;
     }else{
-      html+=`<div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:4px 0 6px">Not started (${groups.none.length})</div>`;
-      html+=groups.none.map(({c,i})=>makeBtn(c,i)).join('');
+      html+=`<div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:12px 0 6px">Not started (${notStartedGroup.length})</div>`;
+      html+=notStartedGroup.map(({c,i})=>makeBtn(c,i)).join('');
     }
+  }
+  if(unassignedGroup.length){
+    html+=`<div style="margin-top:12px">
+      <button class="btn-ghost" style="font-size:12px;width:100%;text-align:left" onclick="toggleUnassigned()">
+        Unassigned (${unassignedGroup.length}) <span id="unassigned-chevron">▼</span>
+      </button>
+      <div id="unassigned-list" style="display:none;margin-top:8px;flex-direction:column;gap:8px">
+        ${unassignedGroup.map(({c,i})=>`<button class="col-select-btn" style="opacity:.5" onclick="openCollectorDetail(${i})">
+          <div style="display:flex;align-items:center;gap:10px;width:100%">
+            <div class="col-status-dot dot-none"></div>
+            <div style="flex:1">
+              <div class="col-select-name">${collectorDisplayName(c.id)}</div>
+              <div class="col-select-meta">No range assigned</div>
+            </div>
+            <span class="col-select-arrow">›</span>
+          </div>
+        </button>`).join('')}
+      </div>
+    </div>`;
   }
   document.getElementById('collector-list-view').innerHTML=html;
   document.getElementById('collector-list-view').style.display='flex';
@@ -1077,7 +1172,7 @@ function renderAdminEntries(){
   document.getElementById('filter-chips').innerHTML=chips.map(ch=>`<button class="filter-chip ${activeFilter===ch.val?'active':''}" onclick="setFilter('${ch.val}')">${ch.label}</button>`).join('');
   const filtered=activeFilter==='all'?sbEntries:sbEntries.filter(e=>e.collector===activeFilter);
   const filteredSk=activeFilter==='all'?sbSkipped:sbSkipped.filter(s=>s.collector===activeFilter);
-  document.getElementById('entries-count').textContent=`${filtered.length} submitted - ${filteredSk.length} skipped`;
+  document.getElementById('entries-count').textContent=` (${filtered.length})`;
   document.getElementById('skipped-badge').textContent=`(${filteredSk.length})`;
   document.getElementById('skipped-list').innerHTML=filteredSk.length
     ?[...filteredSk].reverse().map((s,i)=>`<div class="skip-row" style="margin-bottom:8px;display:flex;align-items:flex-start;gap:10px">
@@ -1107,10 +1202,16 @@ function renderAdminEntries(){
 }
 function setFilter(val){activeFilter=val;renderAdminEntries()}
 let filtersOpen=false;
+let submittedOpen=false;
 function toggleFilters(){
   filtersOpen=!filtersOpen;
   document.getElementById('filter-chips').style.display=filtersOpen?'flex':'none';
   document.getElementById('filter-chevron').textContent=filtersOpen?'▲':'▼';
+}
+function toggleSubmittedSection(){
+  submittedOpen=!submittedOpen;
+  document.getElementById('submitted-section').style.display=submittedOpen?'flex':'none';
+  document.getElementById('submitted-chevron').textContent=submittedOpen?'▲':'▼';
 }
 function toggleSkippedSection(){
   skippedSectionOpen=!skippedSectionOpen;
@@ -1159,8 +1260,8 @@ async function saveCollectorSettings(){
   const updated=cols.map((c,i)=>({
     id:document.getElementById('cfg-id-'+i).value.trim()||`collector${i+1}`,
     pw:document.getElementById('cfg-pw-'+i).value.trim()||c.pw,
-    from:parseInt(document.getElementById('cfg-from-'+i).value)||1,
-    to:parseInt(document.getElementById('cfg-to-'+i).value)||50,
+    from:isNaN(parseInt(document.getElementById('cfg-from-'+i).value))?1:parseInt(document.getElementById('cfg-from-'+i).value),
+    to:isNaN(parseInt(document.getElementById('cfg-to-'+i).value))?50:parseInt(document.getElementById('cfg-to-'+i).value),
   }));
   save('ptwr_collectors',updated);
   await pushConfig('collectors',JSON.stringify(updated));
@@ -1198,6 +1299,51 @@ function showExport(){
   show('screen-export');
 }
 function showPrev(){show(prevScreen)}
+
+let jumpSectionOpen=false;
+function toggleJumpTo(){
+  jumpSectionOpen=!jumpSectionOpen;
+  document.getElementById('jump-section').style.display=jumpSectionOpen?'block':'none';
+  document.getElementById('jump-chevron').textContent=jumpSectionOpen?'▲':'▼';
+}
+
+function jumpToEntry(){
+  const num=parseInt(document.getElementById('jump-input').value);
+  if(!num||num<1){alert('Please enter a valid entry number.');return}
+  const result=document.getElementById('jump-result');
+
+  // Check submitted entries
+  const submitted=sbEntries.find(e=>Number(e.entry)===num);
+  if(submitted){
+    result.innerHTML='';
+    showEntryDetail(submitted);
+    return;
+  }
+
+  // Check skipped entries
+  const skip=sbSkipped.find(e=>Number(e.entry)===num);
+  if(skip){
+    result.innerHTML='';
+    showEntryDetail(skip);
+    return;
+  }
+
+  // Not audited -- find which collector owns it
+  const cols=getCollectors();
+  const owner=cols.find(c=>!isUnassigned(c.from,c.to)&&num>=c.from&&num<=c.to);
+  if(owner){
+    result.innerHTML=`<div style="background:var(--primary-light);border:1.5px solid var(--primary-border);border-radius:var(--rs);padding:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:4px">Entry #${num} - Not yet audited</div>
+      <div style="font-size:13px;color:var(--muted)">Assigned to: <strong style="color:var(--text)">${collectorDisplayName(owner.id)}</strong></div>
+      <div style="font-size:13px;color:var(--muted);margin-top:2px">Range: ${owner.from} to ${owner.to}</div>
+    </div>`;
+  } else {
+    result.innerHTML=`<div style="background:var(--amber-light);border:1.5px solid #fcd34d;border-radius:var(--rs);padding:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--amber)">Entry #${num} - Not assigned to any collector</div>
+      <div style="font-size:13px;color:var(--amber);margin-top:2px">Check collector ranges in Settings.</div>
+    </div>`;
+  }
+}
 
 async function syncToSheets(btn){
   btn.textContent='Syncing...';btn.disabled=true;
